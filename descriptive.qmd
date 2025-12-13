@@ -1,0 +1,143 @@
+---
+title: "descriptive"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+## 3. Descriptive Statistics
+
+### 3.1 Overview
+
+This section summarizes the key descriptive statistics of the NHL skater performance dataset.
+We compute central tendencies, variability, distribution patterns, and identify any outliers that may influence later modeling steps.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+# Load data
+skaters <- read.csv("D:/GMU homeworks/STAT515/final proj/skaters.csv")
+
+# Convert numeric-looking character columns
+skaters_clean <- skaters %>%
+  mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
+
+# Summary statistics for numeric variables
+numeric_summary <- skaters_clean %>%
+  select(where(is.numeric)) %>%
+  summarise(across(everything(),
+                   list(
+                     mean = ~ mean(.x, na.rm = TRUE),
+                     median = ~ median(.x, na.rm = TRUE),
+                     sd = ~ sd(.x, na.rm = TRUE),
+                     min = ~ min(.x, na.rm = TRUE),
+                     max = ~ max(.x, na.rm = TRUE)
+                   ),
+                   .names = "{.col}_{.fn}"
+  ))
+
+kable(numeric_summary, caption = "Descriptive Statistics for Numeric Variables")
+```
+
+------------------------------------------------------------------------
+
+### 3.2 Distribution of Key Variables
+
+Below we visualize distributions for important performance variables such as shifts, TOI, xGoalsForAfterShifts, and xGoalsAgainstAfterShifts.
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+# Desired variables
+vars_to_plot <- c(
+  "shifts",
+  "toi",
+  "xGoalsForAfterShifts",
+  "xGoalsAgainstAfterShifts"
+)
+
+# Keep only columns that exist
+vars_present <- intersect(vars_to_plot, names(skaters_clean))
+
+if (length(vars_present) == 0) {
+  stop("None of the requested variables exist in skaters_clean.")
+}
+
+df_long <- skaters_clean %>%
+  pivot_longer(
+    cols = all_of(vars_present),
+    names_to = "variable",
+    values_to = "value"
+  )
+
+ggplot(df_long, aes(x = value)) +
+  geom_histogram(
+    bins = 40,
+    fill = "steelblue",
+    color = "white",
+    alpha = 0.7
+  ) +
+  facet_wrap(~ variable, scales = "free", ncol = 2) +
+  labs(
+    title = "Distribution of Key Performance Metrics",
+    x = "Value",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+```
+
+------------------------------------------------------------------------
+
+### 3.3 Detecting Outliers
+
+Outliers can distort averages and influence statistical modeling.\
+We detect numeric outliers using the 1.5 × IQR rule.
+
+```{r}
+outlier_detection <- function(x) {
+  q1 <- quantile(x, 0.25, na.rm = TRUE)
+  q3 <- quantile(x, 0.75, na.rm = TRUE)
+  iqr <- q3 - q1
+  sum(x < (q1 - 1.5 * iqr) | x > (q3 + 1.5 * iqr), na.rm = TRUE)
+}
+
+outliers <- skaters_clean %>%
+  select(where(is.numeric)) %>%
+  summarise(across(everything(), outlier_detection))
+
+kable(outliers, caption = "Number of Outliers Detected per Variable")
+```
+
+------------------------------------------------------------------------
+
+### 3.4 Correlation Analysis
+
+We examine relationships between selected numeric variables to identify potential multicollinearity and performance-related patterns.
+
+```{r}
+library(corrplot)
+
+corr_data <- skaters_clean %>%
+  select(where(is.numeric)) %>%
+  cor(use = "pairwise.complete.obs")
+
+corrplot(corr_data, method = "color", type = "upper", tl.col = "red")
+```
+
+------------------------------------------------------------------------
+
+### 3.5 Summary
+
+-   The dataset contains a wide range of performance metrics with varying spreads.
+-   Some variables show skewness, requiring possible transformation.
+-   Several variables contain notable outliers.
+-   Correlation analysis suggests meaningful relationships that will guide predictive modeling.
+
+This descriptive statistics section provides a foundation for deeper inferential analysis and aligns with the quantitative structure of academic data analytics research.

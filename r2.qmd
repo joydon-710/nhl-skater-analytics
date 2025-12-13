@@ -1,0 +1,71 @@
+---
+title: "RQ2 — Special Teams Versatility Score (STVS)"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+## Research Question 2
+
+**Which players are likely to demonstrate higher versatility on special teams, as measured by combined Power Play and Penalty Kill performance metrics?**
+
+Special teams play a decisive role in modern hockey outcomes. Players who can contribute effectively on both the power play (PP) and penalty kill (PK) offer significant strategic value to their teams. This research question introduces a composite metric—**Special Teams Versatility Score (STVS)**—to quantify and analyze this dual impact.
+
+---
+
+## Conceptual Motivation
+
+Power play effectiveness emphasizes offensive creation under advantage, while penalty killing emphasizes defensive suppression under disadvantage. Traditionally, these roles are evaluated independently. However, players capable of excelling in both situations provide lineup flexibility and roster efficiency.
+
+The **STVS** metric integrates both dimensions into a single standardized score, enabling direct comparison across players with different usage patterns.
+
+---
+
+## Data and Variables
+
+This analysis uses aggregated skater-level statistics from the NHL dataset. The following variables are central to RQ2:
+
+* **On-ice expected goals for (PP proxy)**
+* **On-ice expected goals against (PK proxy)**
+* **Shifts and ice time (usage control)**
+* **Corsi and Fenwick-based possession metrics**
+
+Because the dataset is aggregated by situation, we rely on on-ice expected-goal measures as proxies for special-teams impact.
+
+---
+
+## Methodological Overview
+
+To capture nonlinear interactions between offensive and defensive special-teams contributions, we propose a **Random Forest regression model**. This model is well-suited for:
+
+* Handling correlated predictors
+* Capturing threshold effects
+* Ranking variable importance
+
+The outcome variable is the **Special Teams Versatility Score (STVS)**, defined as:
+
+[
+\text{STVS} = Z(\text{PP Impact}) + Z(\text{PK Impact})
+]
+
+where each component is standardized across players.
+
+---
+
+## Expected Outputs
+
+This research question will be answered using:
+
+* Distribution plots of STVS across players
+* Rankings of top versatile skaters
+* Feature-importance visualizations from the Random Forest model
+
+Detailed construction of STVS, preprocessing steps, and visual analytics are presented in the next section.
+
+---
+
+## Navigation
+
+➡️ **Next:** `rq2_details.qmd` — Construction, Modeling, and Visualization of STVS

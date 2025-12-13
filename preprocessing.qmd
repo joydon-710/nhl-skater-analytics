@@ -1,0 +1,47 @@
+---
+title: "preprocessing"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+
+# Preprocessing Steps
+
+This page describes the data cleaning and preparation steps performed before analysis.
+
+---
+
+## 1. Missing Values
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(readr)
+skaters <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv", guess_max = 20000)
+colSums(is.na(skaters))
+```
+
+## 2.Convert Character → Numeric Where Needed
+```{r}
+skaters_clean <- skaters %>%
+  mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
+
+```
+
+## 3. Remove Impossible or Negative Values
+```{r}
+skaters_clean <- skaters_clean %>%
+filter(shifts >= 0)
+
+```
+
+
+## 4. Save Clean Version for Analysis
+```{r}
+skaters <- skaters_clean
+```
+

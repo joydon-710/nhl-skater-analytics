@@ -1,0 +1,57 @@
+---
+title: "Conclusion & Future Work"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: true
+---
+
+# Conclusion
+
+This project applied advanced statistical and visual analytics to evaluate NHL skater performance using shift-level and expected goal metrics. By integrating exploratory analysis, research-driven metrics, and interpretive insights, the study demonstrates the value of modern hockey analytics.
+
+---
+
+## Key Contributions
+
+This project makes the following contributions:
+
+- Introduces shift efficiency as a meaningful performance indicator.
+- Highlights the importance of special teams versatility.
+- Demonstrates the effectiveness of on-ice vs off-ice impact analysis.
+- Provides a reproducible analytics workflow using R and Quarto.
+
+---
+
+## Academic Relevance
+
+From a data analytics perspective, this project demonstrates:
+
+- Appropriate variable selection and preprocessing
+- Use of exploratory and statistical techniques
+- Clear linkage between research questions and analytical outcomes
+- Effective communication of results through visualization and narrative
+
+These align strongly with the learning objectives of STAT 515.
+
+---
+
+## Future Work
+
+Future extensions of this project could include:
+
+- Multi-season trend analysis
+- Incorporation of player salary and contract value
+- Machine learning models for player impact prediction
+- Contextual variables such as zone starts and quality of competition
+- Interactive dashboards for team decision-makers
+
+---
+
+## Final Remarks
+
+Advanced analytics are transforming how professional sports evaluate performance. By leveraging data-driven insights, teams can make smarter decisions that improve competitiveness and efficiency. This project demonstrates how statistical analytics can meaningfully contribute to sports decision-making.
+
+---

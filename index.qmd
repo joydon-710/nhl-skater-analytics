@@ -1,0 +1,70 @@
+---
+title: "NHL Skater Performance Analytics"
+subtitle: "STAT 515 Final Project"
+author: "Jahnavi Gummadi & Joy Donald Singavarapu"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+    
+
+---
+
+# Welcome
+
+This website presents the full analysis of the **STAT 515 Final Project**, focused on advanced analytics for NHL skater performance using the dataset located at:
+
+**`D:/GMU homeworks/STAT515/final proj/skaters.csv`**
+
+This website contains:
+
+- Data exploration  
+- Preprocessing steps  
+- Visual analytics  
+- Three research questions  
+- Statistical and ML modeling  
+- Results, interpretation, and conclusion  
+
+---
+
+## Project Objectives
+
+1. Understand and preprocess the NHL skater dataset.  
+2. Conduct exploratory and statistical analysis.  
+3. Address three predictive analytics research questions:  
+   - **RQ1:** Shift Efficiency (xGF − xGA per shift)  
+   - **RQ2:** Special Teams Versatility  
+   - **RQ3:** On-Ice vs Off-Ice Impact Delta  
+4. Build predictive models.  
+5. Interpret results and derive insights.  
+
+---
+
+## How to Navigate This Website
+
+Use the sidebar navigation to explore full pages:
+
+- **About the Dataset**
+- **Data**
+- **Preprocessing**
+- **Exploratory Data Analysis (EDA)**
+- **Research Questions (RQ1, RQ2, RQ3)**
+- **Modeling**
+- **Results**
+- **Discussion & Conclusion**
+- **Appendix**
+
+---
+
+## Packages Used
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(readr)
+
+skaters <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv", guess_max = 20000)
+head(skaters)
+```

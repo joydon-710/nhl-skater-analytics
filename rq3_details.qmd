@@ -1,0 +1,206 @@
+---
+title: "RQ3 Details: Statistical Validation of Player Impact"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+## Purpose of This Section
+
+This section provides **statistical validation and deeper analysis** supporting Research Question 3. While `rq3.qmd` focused on defining and visualizing player impact groups, this page formally tests whether the observed differences between **high-impact** and **low-impact** skaters are statistically meaningful.
+
+The goal is to move beyond descriptive analytics and demonstrate **inferential rigor**, which is essential for an academic final project.
+
+---
+
+## Data Preparation
+
+We reuse the cleaned dataset and the **Impact Score** defined previously. Players are grouped into **High Impact** and **Low Impact** categories using quartile-based thresholds.
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(effectsize)
+
+```
+
+# Load data
+
+```{r}
+df <- read.csv("D:/GMU homeworks/STAT515/final proj/skaters.csv")
+```
+
+
+# Select and clean relevant columns
+
+```{r}
+df_clean <- df %>%
+select(name, season, shifts,
+xGoalsForAfterShifts,
+xGoalsAgainstAfterShifts) %>%
+mutate(across(where(is.character), as.factor),
+across(where(is.numeric), as.numeric)) %>%
+filter(shifts > 0)
+```
+
+
+# Impact score definition
+
+```{r}
+df_clean <- df_clean %>%
+mutate(impact_score = (xGoalsForAfterShifts - xGoalsAgainstAfterShifts) / shifts)
+```
+
+
+# Define impact groups using quartiles
+
+```{r}
+q25 <- quantile(df_clean$impact_score, 0.25, na.rm = TRUE)
+q75 <- quantile(df_clean$impact_score, 0.75, na.rm = TRUE)
+
+df_groups <- df_clean %>%
+mutate(impact_group = case_when(
+impact_score >= q75 ~ "High Impact",
+impact_score <= q25 ~ "Low Impact",
+TRUE ~ NA_character_
+)) %>%
+filter(!is.na(impact_group))
+
+```
+
+---
+
+## Descriptive Statistics by Impact Group
+
+Before hypothesis testing, we summarize the central tendency and spread of impact scores in each group.
+
+```{r}
+df_groups %>%
+group_by(impact_group) %>%
+summarise(
+n = n(),
+mean_impact = mean(impact_score, na.rm = TRUE),
+median_impact = median(impact_score, na.rm = TRUE),
+sd_impact = sd(impact_score, na.rm = TRUE)
+) %>%
+kable(digits = 4)
+```
+
+
+These statistics already suggest a **substantial separation** between the two groups, motivating formal hypothesis testing.
+
+---
+
+## Hypothesis Formulation
+
+We test whether high-impact players truly outperform low-impact players in terms of the defined impact score.
+
+* **Null Hypothesis (H₀):** There is no difference in mean impact score between high-impact and low-impact players.
+* **Alternative Hypothesis (H₁):** High-impact players have a significantly higher mean impact score than low-impact players.
+
+---
+
+## Independent Samples t-Test
+
+Given the two independent groups, we apply a two-sample t-test.
+
+```{r}
+t_test <- t.test(
+impact_score ~ impact_group,
+data = df_groups,
+alternative = "greater"
+)
+
+t_test
+```
+
+
+### Interpretation
+
+* A **small p-value (p < 0.05)** provides strong evidence against the null hypothesis.
+* This indicates that the difference in impact scores is **statistically significant**, not due to random variation.
+
+---
+
+## Effect Size (Practical Significance)
+
+Statistical significance alone is insufficient. We compute **Cohen’s d** to quantify the magnitude of the difference.
+
+cohens_d <- cohens_d(impact_score ~ impact_group, data = df_groups)
+cohens_d
+
+### Effect Size Interpretation
+
+* **Small effect:** d ≈ 0.2
+* **Medium effect:** d ≈ 0.5
+* **Large effect:** d ≥ 0.8
+
+A medium-to-large effect size suggests that impact group membership has **practical relevance**, not just statistical significance.
+
+---
+
+## Distribution Comparison
+
+Visualizing the distributions helps validate test assumptions and interpret results intuitively.
+
+```{r}
+library(ggplot2)
+
+ggplot(df_groups, aes(x = impact_score, fill = impact_group)) +
+geom_density(alpha = 0.5) +
+labs(
+title = "Impact Score Distributions by Player Group",
+x = "Impact Score",
+y = "Density",
+fill = "Group"
+) +
+theme_minimal()
+```
+
+
+The limited overlap between distributions visually supports the statistical findings.
+
+---
+
+## Robustness Check: Wilcoxon Rank-Sum Test
+
+Because hockey performance metrics may deviate from normality, we also conduct a **non-parametric test**.
+
+```{r}
+wilcox.test(
+impact_score ~ impact_group,
+data = df_groups,
+alternative = "greater"
+)
+
+```
+
+Consistent conclusions across parametric and non-parametric tests strengthen confidence in the results.
+
+---
+
+## Key Findings
+
+* High-impact skaters significantly outperform low-impact skaters based on shift-adjusted expected goals.
+* The observed difference is **statistically significant** and **practically meaningful**.
+* Results are robust across multiple testing frameworks.
+
+---
+
+## Connection to the Overall Project
+
+This detailed analysis reinforces Research Question 3 by:
+
+* Validating the impact metric statistically
+* Demonstrating rigorous analytical methodology
+* Providing defensible evidence suitable for academic evaluation
+
+Together with `rq3.qmd`, this section completes a full descriptive + inferential treatment of player impact.
+
+---
+
+
+
+

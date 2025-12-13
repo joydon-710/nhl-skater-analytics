@@ -1,0 +1,58 @@
+---
+title: "About"
+format:
+  html:
+    toc: true
+    code-fold: true
+---
+
+# Dataset Overview
+
+The dataset contains detailed NHL skater-level performance statistics across shifts, expected goals, Corsi metrics, Fenwick metrics, on-ice/off-ice performance, and special teams performance.
+
+This dataset enables:
+
+- Micro-shift–level analytics  
+- Expected goals modeling  
+- Special teams evaluation  
+- Advanced on/off impact estimation  
+
+---
+
+## Key Statistics Included
+
+- **xGoalsForAfterShifts**
+- **xGoalsAgainstAfterShifts**
+- **Corsi After Shifts**
+- **Fenwick After Shifts**
+- **Power Play metrics**
+- **Penalty Kill metrics**
+- **TOI (Time on Ice)**
+- **Shift counts**
+- **Player roles & positions**
+
+---
+
+## Why This Dataset is Suitable
+
+This dataset supports complex predictive analytics, such as:
+
+- Non-linear decay modeling (RQ1)
+- Composite scoring for special teams roles (RQ2)
+- Player impact segregation using on/off metrics (RQ3)
+
+---
+
+## Structure of Data
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(readr)
+skaters <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv", guess_max = 20000)
+str(skaters)
+cat("Rows:", nrow(skaters), "\nColumns:", ncol(skaters))
+
+
+```
+

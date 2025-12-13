@@ -1,0 +1,37 @@
+---
+title: "data"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+
+# Data Preview
+
+Below is a preview of the dataset loaded from:
+
+**`D:/GMU homeworks/STAT515/final proj/skaters.csv`**
+
+
+
+```{r}
+library(dplyr)
+library(knitr)
+library(readr)
+```
+
+## First 10 Rows
+
+```{r}
+skaters <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv")
+
+skaters %>% 
+  head(10) %>% 
+  kable()
+
+summary(skaters)
+names(skaters)
+
+```

@@ -1,0 +1,147 @@
+---
+title: "RQ3 — On-Ice vs Off-Ice Impact Delta"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+
+## Research Question 3 Overview
+
+The third research question focuses on identifying **which performance metrics most effectively distinguish high-impact skaters from low-impact skaters**. Unlike RQ1 and RQ2, which examined shift efficiency and workload patterns, this section adopts a *comparative and multivariate perspective*. The goal is to determine which statistical indicators provide the strongest separation between top-performing and bottom-performing players.
+
+Understanding these differentiating metrics is valuable for player evaluation, roster construction, and strategic decision-making. By isolating the variables that matter most, analysts can move beyond raw counts and focus on efficiency-driven indicators.
+
+---
+
+## Data Preparation
+
+We begin by loading the skaters dataset and preparing a clean analytical table. Only numeric variables relevant to on-ice performance are retained for analysis.
+```{r}
+
+library(tidyverse)
+library(knitr)
+```
+
+
+# Load dataset
+
+```{r}
+file_path <- "D:/GMU homeworks/STAT515/final proj/skaters.csv"
+df <- read_csv(file_path, show_col_types = FALSE)
+```
+
+
+# Inspect column names
+
+```{r}
+names(df)
+```
+
+
+To ensure consistency, we convert all applicable performance metrics to numeric format while preserving identifying variables such as season and team.
+
+```{r}
+df_clean <- df %>%
+mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
+```
+
+
+---
+
+## Defining High- and Low-Impact Skaters
+
+To differentiate player impact levels, we construct a composite **impact score** based on expected goal contribution after shifts. This score reflects a player’s net influence on scoring chances.
+
+```{r}
+df_clean <- df_clean %>%
+mutate(
+net_xg = xGoalsForAfterShifts - xGoalsAgainstAfterShifts
+)
+```
+
+
+Players are then divided into **high-impact** and **low-impact** groups using quartiles of the net expected goals distribution.
+
+```{r}
+quantiles <- quantile(df_clean$net_xg, probs = c(0.25, 0.75), na.rm = TRUE)
+
+impact_df <- df_clean %>%
+filter(!is.na(net_xg)) %>%
+mutate(
+impact_group = case_when(
+net_xg >= quantiles[2] ~ "High Impact",
+net_xg <= quantiles[1] ~ "Low Impact",
+TRUE ~ NA_character_
+)
+) %>%
+filter(!is.na(impact_group))
+```
+
+
+---
+
+## Comparing Performance Metrics
+
+We compare key metrics between high-impact and low-impact skaters, focusing on workload, scoring contribution, and possession-related indicators.
+
+```{r}
+metrics <- c(
+"shifts",
+"xGoalsForAfterShifts",
+"xGoalsAgainstAfterShifts",
+"net_xg"
+)
+
+summary_table <- impact_df %>%
+group_by(impact_group) %>%
+summarise(across(all_of(metrics), ~ mean(.x, na.rm = TRUE)))
+
+kable(summary_table, digits = 3,
+caption = "Average Performance Metrics by Impact Group")
+```
+
+
+---
+
+## Visualization of Group Differences
+
+The following visualization highlights how key metrics differ between high-impact and low-impact skaters.
+
+```{r}
+impact_long <- impact_df %>%
+select(impact_group, all_of(metrics)) %>%
+pivot_longer(cols = -impact_group,
+names_to = "metric",
+values_to = "value")
+
+ggplot(impact_long, aes(x = impact_group, y = value, fill = impact_group)) +
+geom_boxplot(alpha = 0.7) +
+facet_wrap(~ metric, scales = "free") +
+labs(title = "Metric Distributions by Skater Impact Level",
+x = "Impact Group",
+y = "Value") +
+theme_minimal() +
+theme(legend.position = "none")
+```
+
+
+---
+
+## Interpretation
+
+High-impact skaters consistently demonstrate higher values of expected goals for after shifts and substantially stronger net expected goal contributions. In contrast, low-impact skaters tend to allow more expected goals against, reducing their overall on-ice effectiveness.
+
+Interestingly, the number of shifts alone does not fully explain impact. While high-impact players often log more shifts, **efficiency-based metrics**—particularly net expected goals—provide clearer differentiation. This reinforces the importance of advanced analytics over raw usage statistics.
+
+---
+
+## Conclusion
+
+This analysis shows that **net expected goal contribution after shifts** is the most powerful single metric for separating high- and low-impact skaters. Supporting metrics such as expected goals for and against further clarify player effectiveness, while workload indicators play a secondary role.
+
+These findings complement RQ1 and RQ2 by shifting the focus from descriptive patterns to **comparative performance evaluation**, offering actionable insight for coaches, analysts, and front offices.
+
+In the next section (`rq3_details.qmd`), we extend this analysis with deeper statistical testing and robustness checks.

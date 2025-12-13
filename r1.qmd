@@ -1,0 +1,48 @@
+---
+title: "RQ1 — Research Question 1: Shift Efficiency and Player Performance"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+## Research Question 1
+
+**How does a player’s shift-based expected goal efficiency relate to overall on-ice performance in the 2023–2024 NHL season?**
+
+This research question focuses on understanding whether players who generate more positive outcomes during their shifts—measured using expected goals—also demonstrate stronger overall performance. Shift-level metrics are particularly valuable in hockey analytics because they normalize performance by opportunity, allowing for fairer comparisons across players with varying ice time and roles.
+
+## Motivation and Context
+
+In modern hockey analytics, traditional statistics such as goals and assists are often insufficient to fully capture a player’s impact. Advanced metrics like *expected goals for (xGF)* and *expected goals against (xGA)* provide a probabilistic assessment of scoring chances based on shot quality, location, and game context. When these metrics are evaluated after player shifts, they offer insight into how effectively a player contributes to offensive pressure while limiting defensive risk.
+
+By analyzing expected goals on a per-shift basis, this study seeks to answer whether players who consistently finish shifts with a positive expected goal differential can be identified as more efficient or impactful contributors. Such insights are valuable for coaching decisions, player evaluation, and roster optimization.
+
+## Analytical Approach
+
+To address this research question, aggregated player-level data from the NHL skaters dataset were used. For each player, the total expected goals for after shifts and expected goals against after shifts were combined with the total number of shifts played. These values were used to compute an **average shift efficiency metric**, defined as the difference between expected goals for and against, normalized by the number of shifts.
+
+The analysis examines:
+
+-   The overall distribution of average shift efficiency across players
+
+-   Identification of players with particularly high or low efficiency values
+
+-   General trends that suggest whether shift efficiency meaningfully differentiates player performance
+
+All statistical computations and visualizations supporting these findings are presented in the detailed analysis page.
+
+## Summary of Findings
+
+The results indicate that average shift efficiency varies substantially across players, suggesting meaningful differences in how effectively players contribute during their time on the ice. A subset of players consistently demonstrates positive shift efficiency, reflecting stronger offensive impact and/or defensive reliability during shifts. Conversely, players with negative efficiency values may be associated with greater defensive exposure or reduced offensive effectiveness.
+
+These findings support the usefulness of shift-based expected goal metrics as an evaluative tool, complementing traditional performance statistics. While shift efficiency alone does not capture all dimensions of player value, it provides a concise and interpretable measure of per-opportunity impact.
+
+## Link to Detailed Analysis
+
+The full statistical analysis, including data preparation, metric construction, tables, and visualizations, is presented in:
+
+➡ **RQ1 Detailed Analysis** (`rq1_details.qmd`)
+
+This page includes reproducible R code and graphical outputs that support the conclusions summarized above.

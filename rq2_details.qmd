@@ -1,0 +1,179 @@
+---
+title: "RQ2 — Predicting Special Teams Versatility Score (STVS)"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+## 1. Introduction
+
+This section provides the detailed empirical analysis for **Research Question 2**, focusing on identifying players who demonstrate strong versatility on special teams. Rather than evaluating power-play (PP) and penalty-kill (PK) performance in isolation, we construct a unified metric—the **Special Teams Versatility Score (STVS)**—that captures both offensive and defensive contributions.
+
+---
+
+## 2. Data Loading and Preparation
+
+### 2.1 Load Libraries
+```{r}
+library(tidyverse)
+library(knitr)
+library(randomForest)
+```
+
+
+
+### 2.2 Load Dataset
+
+```{r}
+df <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv")
+```
+
+
+### 2.3 Standardize Naming Conventions
+
+```{r}
+df <- df %>%
+  rename(
+    player = name,
+    toi = icetime
+  )
+```
+
+
+---
+
+## 3. Variable Selection and Validation
+
+### 3.1 Required Columns
+
+We use on-ice expected-goals metrics as proxies for special-teams performance.
+
+```{r}
+req_cols <- c(
+  "player",
+  "season",
+  "OnIce_F_xGoals",
+  "OnIce_A_xGoals",
+  "toi"
+)
+
+missing_cols <- setdiff(req_cols, names(df))
+if (length(missing_cols) > 0) {
+  stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
+}
+```
+
+
+---
+
+## 4. Constructing the STVS Metric
+
+### 4.1 Power Play and Penalty Kill Proxies
+
+* **PP Impact**: On-ice expected goals for
+* **PK Impact**: Negative of on-ice expected goals against
+
+```{r}
+df <- df %>%
+  mutate(
+    pp_impact = as.numeric(OnIce_F_xGoals),
+    pk_impact = -as.numeric(OnIce_A_xGoals)
+  )
+```
+
+
+### 4.2 Standardization
+
+```{r}
+df <- df %>%
+  mutate(
+    pp_z = scale(pp_impact)[,1],
+    pk_z = scale(pk_impact)[,1],
+    STVS = pp_z + pk_z
+  )
+```
+
+
+---
+
+## 5. Exploratory Analysis
+
+### 5.1 Distribution of STVS
+
+
+```{r}
+ggplot(df, aes(x = STVS)) +
+  geom_histogram(bins = 40, fill = "darkorange", alpha = 0.75) +
+  labs(
+    title = "Distribution of Special Teams Versatility Score",
+    x = "STVS",
+    y = "Number of Players"
+  ) +
+  theme_minimal()
+```
+
+
+
+---
+
+### 5.2 Top Players by STVS
+
+```{r}
+df %>%
+  arrange(desc(STVS)) %>%
+  select(player, season, STVS, pp_impact, pk_impact) %>%
+  head(15) %>%
+  kable(caption = "Top Players by Special Teams Versatility Score")
+```
+
+
+---
+
+## 6. Predictive Modeling: Random Forest
+
+### 6.1 Model Data Preparation
+
+```{r}
+rf_data <- df %>%
+  select(STVS, pp_impact, pk_impact, toi) %>%
+  drop_na()
+```
+
+
+### 6.2 Train Random Forest Model
+
+```{r}
+set.seed(515)
+rf_model <- randomForest(
+  STVS ~ pp_impact + pk_impact + toi,
+  data = rf_data,
+  importance = TRUE
+)
+```
+
+
+---
+
+### 6.3 Feature Importance
+
+```{r}
+varImpPlot(rf_model, main = "Random Forest Feature Importance for STVS")
+```
+
+
+---
+
+## 7. Interpretation
+
+The Random Forest model highlights both offensive (PP) and defensive (PK) components as critical drivers of special-teams versatility. Time on ice further moderates these effects, reflecting coaching trust and deployment context.
+
+Players with high STVS scores are therefore those who consistently contribute under both numerical advantage and disadvantage.
+
+---
+
+## 8. Conclusion
+
+RQ2 demonstrates that special-teams versatility can be quantified using a composite expected-goals-based metric. The STVS framework provides teams with a data-driven approach to identifying multi-role contributors and optimizing lineup decisions.
+
+➡️ **Next:** `rq3.qmd` — On-Ice vs Off-Ice Impact Delta

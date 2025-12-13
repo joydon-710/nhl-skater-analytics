@@ -1,0 +1,70 @@
+---
+title: "eda"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+---
+
+
+# Exploratory Data Analysis
+
+This section visualizes major patterns in the dataset.
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(knitr)
+library(readr)
+```
+
+
+## Distribution of Shifts
+
+```{r}
+skaters <- read_csv("D:/GMU homeworks/STAT515/final proj/skaters.csv", guess_max = 20000)
+ggplot(skaters, aes(shifts)) +
+geom_histogram(bins = 40, fill = "#2a3f5f", color = "white") +
+theme_minimal() +
+labs(
+title = "Distribution of Shifts",
+x = "Shifts",
+y = "Count"
+)
+
+```
+
+## xGF Vs xGA
+
+```{r}
+ggplot(skaters, aes(xGoalsForAfterShifts, xGoalsAgainstAfterShifts)) +
+geom_point(alpha = 0.4) +
+theme_minimal() +
+labs(
+title = "xGF vs xGA After Shifts",
+x = "xGoals For",
+y = "xGoals Against"
+)
+
+
+```
+
+## Corelation heatmap
+
+```{r}
+numeric_df <- skaters %>% select(where(is.numeric))
+
+corr <- cor(numeric_df, use = "pairwise.complete.obs")
+
+heatmap(
+corr,
+Rowv = NA,
+Colv = NA,
+scale = "none"
+)
+
+
+```
+

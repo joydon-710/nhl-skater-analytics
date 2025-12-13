@@ -1,0 +1,79 @@
+---
+title: "Results & Discussion"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: true
+---
+
+# Results & Discussion
+
+This section synthesizes findings from all three research questions and interprets the statistical and analytical results in the context of NHL skater performance.
+
+---
+
+## Summary of Key Findings
+
+Across all analyses, the results highlight that player value cannot be captured by a single metric such as total goals or ice time. Instead, advanced analytics such as expected goals, shift efficiency, and on-ice impact provide deeper insight into player contributions.
+
+---
+
+## RQ1: Shift Efficiency Results
+
+The first research question analyzed **shift efficiency**, defined as the difference between expected goals for and against per shift. Results show that:
+
+- Players with higher shift efficiency consistently demonstrated stronger two-way play.
+- High-efficiency players were not always those with the highest total ice time, indicating that **quality of shifts matters more than quantity**.
+- A diminishing returns pattern was observed, where increases in shifts beyond a threshold provided marginal efficiency gains.
+
+This suggests that coaches may benefit from optimizing shift usage rather than maximizing player ice time.
+
+---
+
+## RQ2: Special Teams Versatility Results
+
+The second research question examined player versatility in **power play and penalty kill situations**. Findings indicate that:
+
+- A subset of players contributes meaningfully in both special teams roles.
+- These versatile players tend to have higher overall expected goal impact.
+- Special teams effectiveness is strongly associated with team-level success metrics.
+
+This highlights the importance of developing multi-role players who can adapt to different in-game situations.
+
+---
+
+## RQ3: On-Ice vs Off-Ice Impact Results
+
+The third research question focused on isolating player impact using on-ice versus off-ice metrics. Key results include:
+
+- Significant differences between on-ice and off-ice expected goal differentials for top-performing players.
+- Certain players demonstrated a strong positive impact even when controlling for team strength.
+- These impact deltas provide a more accurate representation of individual contribution than raw scoring statistics.
+
+This reinforces the value of advanced on/off analytics in modern hockey evaluation.
+
+---
+
+## Practical Implications
+
+The results of this analysis offer several practical implications:
+
+- Coaches can optimize line combinations using efficiency metrics.
+- Front offices can identify undervalued players using on/off impact measures.
+- Analysts can move beyond traditional statistics to more predictive performance indicators.
+
+---
+
+## Limitations
+
+While informative, this study has several limitations:
+
+- The dataset does not account for player injuries or opposition strength.
+- Shift context (zone starts, matchups) is not fully captured.
+- The analysis is limited to a single season snapshot.
+
+These limitations provide opportunities for further refinement.
+
+---
