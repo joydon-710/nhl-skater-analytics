@@ -1,0 +1,3267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>data – NHL Skater Performance Analytics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b512256bc363577b27543e003c495f0c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./data.html">data</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">NHL Skater Performance Analytics</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">NHL Skater Performance Analytics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Background</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">preprocessing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">descriptive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">eda</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 1</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ1 — Research Question 1: Shift Efficiency and Player Performance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq1_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">code-fold: true</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 2</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq2_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Predicting Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 3</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 — On-Ice vs Off-Ice Impact Delta</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq3_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 Details: Statistical Validation of Player Impact</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Results &amp; Conclusion</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Results &amp; Discussion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Conclusion &amp; Future Work</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-preview" id="toc-data-preview" class="nav-link active" data-scroll-target="#data-preview"><span class="header-section-number">1</span> Data Preview</a>
+  <ul class="collapse">
+  <li><a href="#first-10-rows" id="toc-first-10-rows" class="nav-link" data-scroll-target="#first-10-rows"><span class="header-section-number">1.1</span> First 10 Rows</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./data.html">data</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="data-preview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Data Preview</h1>
+<p>Below is a preview of the dataset loaded from:</p>
+<p><strong><code>D:/GMU homeworks/STAT515/final proj/skaters.csv</code></strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'knitr' was built under R version 4.5.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.5.2</code></pre>
+</div>
+</div>
+<section id="first-10-rows" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="first-10-rows"><span class="header-section-number">1.1</span> First 10 Rows</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>skaters <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"D:/GMU homeworks/STAT515/final proj/skaters.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4600 Columns: 154
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr   (4): name, team, position, situation
+dbl (150): playerId, season, games_played, icetime, shifts, gameScore, onIce...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>skaters <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">playerId</th>
+<th style="text-align: right;">season</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">team</th>
+<th style="text-align: left;">position</th>
+<th style="text-align: left;">situation</th>
+<th style="text-align: right;">games_played</th>
+<th style="text-align: right;">icetime</th>
+<th style="text-align: right;">shifts</th>
+<th style="text-align: right;">gameScore</th>
+<th style="text-align: right;">onIce_xGoalsPercentage</th>
+<th style="text-align: right;">offIce_xGoalsPercentage</th>
+<th style="text-align: right;">onIce_corsiPercentage</th>
+<th style="text-align: right;">offIce_corsiPercentage</th>
+<th style="text-align: right;">onIce_fenwickPercentage</th>
+<th style="text-align: right;">offIce_fenwickPercentage</th>
+<th style="text-align: right;">iceTimeRank</th>
+<th style="text-align: right;">I_F_xOnGoal</th>
+<th style="text-align: right;">I_F_xGoals</th>
+<th style="text-align: right;">I_F_xRebounds</th>
+<th style="text-align: right;">I_F_xFreeze</th>
+<th style="text-align: right;">I_F_xPlayStopped</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">I_F_primaryAssists</th>
+<th style="text-align: right;">I_F_secondaryAssists</th>
+<th style="text-align: right;">I_F_shotsOnGoal</th>
+<th style="text-align: right;">I_F_missedShots</th>
+<th style="text-align: right;">I_F_blockedShotAttempts</th>
+<th style="text-align: right;">I_F_shotAttempts</th>
+<th style="text-align: right;">I_F_points</th>
+<th style="text-align: right;">I_F_goals</th>
+<th style="text-align: right;">I_F_rebounds</th>
+<th style="text-align: right;">I_F_reboundGoals</th>
+<th style="text-align: right;">I_F_freeze</th>
+<th style="text-align: right;">I_F_playStopped</th>
+<th style="text-align: right;">I_F_playContinuedInZone</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts</th>
+<th style="text-align: right;">penalties</th>
+<th style="text-align: right;">I_F_penalityMinutes</th>
+<th style="text-align: right;">I_F_faceOffsWon</th>
+<th style="text-align: right;">I_F_hits</th>
+<th style="text-align: right;">I_F_takeaways</th>
+<th style="text-align: right;">I_F_giveaways</th>
+<th style="text-align: right;">I_F_lowDangerShots</th>
+<th style="text-align: right;">I_F_mediumDangerShots</th>
+<th style="text-align: right;">I_F_highDangerShots</th>
+<th style="text-align: right;">I_F_lowDangerxGoals</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals</th>
+<th style="text-align: right;">I_F_highDangerxGoals</th>
+<th style="text-align: right;">I_F_lowDangerGoals</th>
+<th style="text-align: right;">I_F_mediumDangerGoals</th>
+<th style="text-align: right;">I_F_highDangerGoals</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">I_F_dZoneGiveaways</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">I_F_reboundxGoals</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">I_F_shifts</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts</th>
+<th style="text-align: right;">I_F_flyShiftStarts</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds</th>
+<th style="text-align: right;">I_F_flyShiftEnds</th>
+<th style="text-align: right;">faceoffsWon</th>
+<th style="text-align: right;">faceoffsLost</th>
+<th style="text-align: right;">timeOnBench</th>
+<th style="text-align: right;">penalityMinutes</th>
+<th style="text-align: right;">penalityMinutesDrawn</th>
+<th style="text-align: right;">penaltiesDrawn</th>
+<th style="text-align: right;">shotsBlockedByPlayer</th>
+<th style="text-align: right;">OnIce_F_xOnGoal</th>
+<th style="text-align: right;">OnIce_F_xGoals</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal</th>
+<th style="text-align: right;">OnIce_F_missedShots</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_shotAttempts</th>
+<th style="text-align: right;">OnIce_F_goals</th>
+<th style="text-align: right;">OnIce_F_rebounds</th>
+<th style="text-align: right;">OnIce_F_reboundGoals</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots</th>
+<th style="text-align: right;">OnIce_F_highDangerShots</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">OnIce_A_xOnGoal</th>
+<th style="text-align: right;">OnIce_A_xGoals</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal</th>
+<th style="text-align: right;">OnIce_A_missedShots</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_shotAttempts</th>
+<th style="text-align: right;">OnIce_A_goals</th>
+<th style="text-align: right;">OnIce_A_rebounds</th>
+<th style="text-align: right;">OnIce_A_reboundGoals</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots</th>
+<th style="text-align: right;">OnIce_A_highDangerShots</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">OffIce_F_xGoals</th>
+<th style="text-align: right;">OffIce_A_xGoals</th>
+<th style="text-align: right;">OffIce_F_shotAttempts</th>
+<th style="text-align: right;">OffIce_A_shotAttempts</th>
+<th style="text-align: right;">xGoalsForAfterShifts</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts</th>
+<th style="text-align: right;">corsiForAfterShifts</th>
+<th style="text-align: right;">corsiAgainstAfterShifts</th>
+<th style="text-align: right;">fenwickForAfterShifts</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8478047</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Michael Bunting</td>
+<td style="text-align: left;">NSH</td>
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">other</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">2237</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">26.19</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">0.64</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">228</td>
+<td style="text-align: right;">13.06</td>
+<td style="text-align: right;">3.93</td>
+<td style="text-align: right;">1.21</td>
+<td style="text-align: right;">2.77</td>
+<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">6.69</td>
+<td style="text-align: right;">2.75</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: right;">3.93</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">3.27</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">21.00</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">18.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.38</td>
+<td style="text-align: right;">1.07</td>
+<td style="text-align: right;">1.47</td>
+<td style="text-align: right;">2.84</td>
+<td style="text-align: right;">2.84</td>
+<td style="text-align: right;">2.42</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3275</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">39.72</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: right;">6.02</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: right;">6.02</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.05</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">4.80</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">86.00</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">55.00</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">2.24</td>
+<td style="text-align: right;">2.24</td>
+<td style="text-align: right;">6.87</td>
+<td style="text-align: right;">6.87</td>
+<td style="text-align: right;">6.00</td>
+<td style="text-align: right;">19.50</td>
+<td style="text-align: right;">13.43</td>
+<td style="text-align: right;">12.82</td>
+<td style="text-align: right;">13.43</td>
+<td style="text-align: right;">12.82</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">13.07</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">46.00</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">31.00</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">13.66</td>
+<td style="text-align: right;">13.66</td>
+<td style="text-align: right;">13.04</td>
+<td style="text-align: right;">7.28</td>
+<td style="text-align: right;">10.09</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8478047</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Michael Bunting</td>
+<td style="text-align: left;">NSH</td>
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">70819</td>
+<td style="text-align: right;">1474</td>
+<td style="text-align: right;">43.70</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">442</td>
+<td style="text-align: right;">177.00</td>
+<td style="text-align: right;">25.19</td>
+<td style="text-align: right;">13.12</td>
+<td style="text-align: right;">39.40</td>
+<td style="text-align: right;">6.19</td>
+<td style="text-align: right;">91.25</td>
+<td style="text-align: right;">61.85</td>
+<td style="text-align: right;">22.85</td>
+<td style="text-align: right;">25.01</td>
+<td style="text-align: right;">22.68</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">313</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">218</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">137</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">4.10</td>
+<td style="text-align: right;">8.95</td>
+<td style="text-align: right;">12.13</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">311.22</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">235.42</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">3.04</td>
+<td style="text-align: right;">5.09</td>
+<td style="text-align: right;">8.28</td>
+<td style="text-align: right;">19.95</td>
+<td style="text-align: right;">19.85</td>
+<td style="text-align: right;">19.21</td>
+<td style="text-align: right;">1474</td>
+<td style="text-align: right;">231</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">216</td>
+<td style="text-align: right;">945</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">204</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">823</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">206470</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">720.83</td>
+<td style="text-align: right;">73.36</td>
+<td style="text-align: right;">68.43</td>
+<td style="text-align: right;">73.39</td>
+<td style="text-align: right;">68.47</td>
+<td style="text-align: right;">625</td>
+<td style="text-align: right;">358</td>
+<td style="text-align: right;">408</td>
+<td style="text-align: right;">1391</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">702</td>
+<td style="text-align: right;">199</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">19.41</td>
+<td style="text-align: right;">25.50</td>
+<td style="text-align: right;">28.45</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1386.61</td>
+<td style="text-align: right;">983</td>
+<td style="text-align: right;">980.93</td>
+<td style="text-align: right;">11.77</td>
+<td style="text-align: right;">19.02</td>
+<td style="text-align: right;">19.02</td>
+<td style="text-align: right;">66.10</td>
+<td style="text-align: right;">66.23</td>
+<td style="text-align: right;">63.74</td>
+<td style="text-align: right;">522.98</td>
+<td style="text-align: right;">58.97</td>
+<td style="text-align: right;">56.18</td>
+<td style="text-align: right;">59.82</td>
+<td style="text-align: right;">56.92</td>
+<td style="text-align: right;">506</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">287</td>
+<td style="text-align: right;">1013</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">519</td>
+<td style="text-align: right;">133</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">14.68</td>
+<td style="text-align: right;">17.10</td>
+<td style="text-align: right;">27.19</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">1025.13</td>
+<td style="text-align: right;">726</td>
+<td style="text-align: right;">735.86</td>
+<td style="text-align: right;">7.10</td>
+<td style="text-align: right;">11.43</td>
+<td style="text-align: right;">11.43</td>
+<td style="text-align: right;">54.65</td>
+<td style="text-align: right;">55.28</td>
+<td style="text-align: right;">54.07</td>
+<td style="text-align: right;">161.54</td>
+<td style="text-align: right;">187.75</td>
+<td style="text-align: right;">3221</td>
+<td style="text-align: right;">3522</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8478047</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Michael Bunting</td>
+<td style="text-align: left;">NSH</td>
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">5on5</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">59813</td>
+<td style="text-align: right;">1294</td>
+<td style="text-align: right;">43.70</td>
+<td style="text-align: right;">0.52</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.53</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.53</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">397</td>
+<td style="text-align: right;">126.76</td>
+<td style="text-align: right;">14.67</td>
+<td style="text-align: right;">8.67</td>
+<td style="text-align: right;">29.83</td>
+<td style="text-align: right;">4.42</td>
+<td style="text-align: right;">64.91</td>
+<td style="text-align: right;">48.50</td>
+<td style="text-align: right;">14.01</td>
+<td style="text-align: right;">14.49</td>
+<td style="text-align: right;">13.84</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">111</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">230</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">3.11</td>
+<td style="text-align: right;">6.74</td>
+<td style="text-align: right;">4.81</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">228.22</td>
+<td style="text-align: right;">171</td>
+<td style="text-align: right;">169.42</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.82</td>
+<td style="text-align: right;">3.25</td>
+<td style="text-align: right;">4.47</td>
+<td style="text-align: right;">12.01</td>
+<td style="text-align: right;">11.92</td>
+<td style="text-align: right;">11.80</td>
+<td style="text-align: right;">1294</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: right;">849</td>
+<td style="text-align: right;">201</td>
+<td style="text-align: right;">191</td>
+<td style="text-align: right;">166</td>
+<td style="text-align: right;">736</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">167868</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">528.95</td>
+<td style="text-align: right;">45.92</td>
+<td style="text-align: right;">44.29</td>
+<td style="text-align: right;">45.96</td>
+<td style="text-align: right;">44.33</td>
+<td style="text-align: right;">458</td>
+<td style="text-align: right;">268</td>
+<td style="text-align: right;">317</td>
+<td style="text-align: right;">1043</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">139</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">14.84</td>
+<td style="text-align: right;">18.12</td>
+<td style="text-align: right;">12.94</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1038.61</td>
+<td style="text-align: right;">726</td>
+<td style="text-align: right;">723.93</td>
+<td style="text-align: right;">7.08</td>
+<td style="text-align: right;">12.21</td>
+<td style="text-align: right;">12.21</td>
+<td style="text-align: right;">40.79</td>
+<td style="text-align: right;">40.92</td>
+<td style="text-align: right;">40.40</td>
+<td style="text-align: right;">476.83</td>
+<td style="text-align: right;">43.09</td>
+<td style="text-align: right;">40.93</td>
+<td style="text-align: right;">43.94</td>
+<td style="text-align: right;">41.67</td>
+<td style="text-align: right;">457</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: right;">268</td>
+<td style="text-align: right;">923</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">481</td>
+<td style="text-align: right;">127</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">13.61</td>
+<td style="text-align: right;">16.34</td>
+<td style="text-align: right;">13.15</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">935.13</td>
+<td style="text-align: right;">655</td>
+<td style="text-align: right;">664.86</td>
+<td style="text-align: right;">6.48</td>
+<td style="text-align: right;">11.41</td>
+<td style="text-align: right;">11.41</td>
+<td style="text-align: right;">38.16</td>
+<td style="text-align: right;">38.80</td>
+<td style="text-align: right;">38.23</td>
+<td style="text-align: right;">112.73</td>
+<td style="text-align: right;">122.08</td>
+<td style="text-align: right;">2661</td>
+<td style="text-align: right;">2707</td>
+<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">1.71</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">43</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8478047</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Michael Bunting</td>
+<td style="text-align: left;">NSH</td>
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">4on5</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2.58</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.53</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">994</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8478047</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Michael Bunting</td>
+<td style="text-align: left;">NSH</td>
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">5on4</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">8763</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">36.88</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">0.86</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">319</td>
+<td style="text-align: right;">36.38</td>
+<td style="text-align: right;">6.47</td>
+<td style="text-align: right;">3.20</td>
+<td style="text-align: right;">6.70</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">19.37</td>
+<td style="text-align: right;">10.15</td>
+<td style="text-align: right;">6.19</td>
+<td style="text-align: right;">6.47</td>
+<td style="text-align: right;">6.19</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.74</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">4.05</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">61.00</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">47.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">2.34</td>
+<td style="text-align: right;">4.96</td>
+<td style="text-align: right;">4.96</td>
+<td style="text-align: right;">4.86</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10857</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">151.35</td>
+<td style="text-align: right;">19.33</td>
+<td style="text-align: right;">18.01</td>
+<td style="text-align: right;">19.33</td>
+<td style="text-align: right;">18.01</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">65</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">261</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">3.51</td>
+<td style="text-align: right;">5.10</td>
+<td style="text-align: right;">10.72</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">261.00</td>
+<td style="text-align: right;">201</td>
+<td style="text-align: right;">201.00</td>
+<td style="text-align: right;">3.55</td>
+<td style="text-align: right;">4.57</td>
+<td style="text-align: right;">4.57</td>
+<td style="text-align: right;">18.31</td>
+<td style="text-align: right;">18.31</td>
+<td style="text-align: right;">17.21</td>
+<td style="text-align: right;">26.66</td>
+<td style="text-align: right;">2.45</td>
+<td style="text-align: right;">2.43</td>
+<td style="text-align: right;">2.45</td>
+<td style="text-align: right;">2.43</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.81</td>
+<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">44.00</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">40.00</td>
+<td style="text-align: right;">0.39</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.80</td>
+<td style="text-align: right;">23.81</td>
+<td style="text-align: right;">2.60</td>
+<td style="text-align: right;">311</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8480950</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Ilya Lyubushkin</td>
+<td style="text-align: left;">DAL</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">other</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">1868</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">11.70</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">0.57</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">1.19</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.86</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5207</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7.38</td>
+<td style="text-align: right;">5.95</td>
+<td style="text-align: right;">5.79</td>
+<td style="text-align: right;">5.95</td>
+<td style="text-align: right;">5.79</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">5.91</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14.00</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">12.00</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">6.03</td>
+<td style="text-align: right;">6.03</td>
+<td style="text-align: right;">5.86</td>
+<td style="text-align: right;">39.97</td>
+<td style="text-align: right;">7.49</td>
+<td style="text-align: right;">6.14</td>
+<td style="text-align: right;">7.49</td>
+<td style="text-align: right;">6.14</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: right;">1.45</td>
+<td style="text-align: right;">5.20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">69.00</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">54.00</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">1.48</td>
+<td style="text-align: right;">1.48</td>
+<td style="text-align: right;">7.03</td>
+<td style="text-align: right;">7.03</td>
+<td style="text-align: right;">6.22</td>
+<td style="text-align: right;">15.02</td>
+<td style="text-align: right;">11.47</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">119</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8480950</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Ilya Lyubushkin</td>
+<td style="text-align: left;">DAL</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">83457</td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">10.38</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0.54</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0.52</td>
+<td style="text-align: right;">338</td>
+<td style="text-align: right;">65.75</td>
+<td style="text-align: right;">2.33</td>
+<td style="text-align: right;">3.35</td>
+<td style="text-align: right;">18.40</td>
+<td style="text-align: right;">2.23</td>
+<td style="text-align: right;">39.13</td>
+<td style="text-align: right;">29.56</td>
+<td style="text-align: right;">2.28</td>
+<td style="text-align: right;">2.36</td>
+<td style="text-align: right;">2.30</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">146</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.82</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">148.55</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">96.32</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">1.28</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">2.98</td>
+<td style="text-align: right;">3.02</td>
+<td style="text-align: right;">2.94</td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">361</td>
+<td style="text-align: right;">305</td>
+<td style="text-align: right;">983</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: right;">226</td>
+<td style="text-align: right;">199</td>
+<td style="text-align: right;">1128</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">206701</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">581.15</td>
+<td style="text-align: right;">58.71</td>
+<td style="text-align: right;">56.75</td>
+<td style="text-align: right;">58.71</td>
+<td style="text-align: right;">56.78</td>
+<td style="text-align: right;">530</td>
+<td style="text-align: right;">267</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">1097</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">559</td>
+<td style="text-align: right;">168</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">16.66</td>
+<td style="text-align: right;">20.62</td>
+<td style="text-align: right;">21.42</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1105.49</td>
+<td style="text-align: right;">797</td>
+<td style="text-align: right;">801.99</td>
+<td style="text-align: right;">7.65</td>
+<td style="text-align: right;">11.67</td>
+<td style="text-align: right;">12.14</td>
+<td style="text-align: right;">54.21</td>
+<td style="text-align: right;">54.45</td>
+<td style="text-align: right;">53.39</td>
+<td style="text-align: right;">835.97</td>
+<td style="text-align: right;">80.07</td>
+<td style="text-align: right;">75.84</td>
+<td style="text-align: right;">79.91</td>
+<td style="text-align: right;">75.68</td>
+<td style="text-align: right;">761</td>
+<td style="text-align: right;">380</td>
+<td style="text-align: right;">437</td>
+<td style="text-align: right;">1578</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">835</td>
+<td style="text-align: right;">217</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">23.44</td>
+<td style="text-align: right;">25.47</td>
+<td style="text-align: right;">31.16</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1567.42</td>
+<td style="text-align: right;">1141</td>
+<td style="text-align: right;">1134.20</td>
+<td style="text-align: right;">12.99</td>
+<td style="text-align: right;">17.39</td>
+<td style="text-align: right;">17.39</td>
+<td style="text-align: right;">75.67</td>
+<td style="text-align: right;">75.39</td>
+<td style="text-align: right;">73.31</td>
+<td style="text-align: right;">203.99</td>
+<td style="text-align: right;">166.76</td>
+<td style="text-align: right;">3688</td>
+<td style="text-align: right;">3128</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8480950</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Ilya Lyubushkin</td>
+<td style="text-align: left;">DAL</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">5on5</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">70786</td>
+<td style="text-align: right;">1535</td>
+<td style="text-align: right;">10.38</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">367</td>
+<td style="text-align: right;">61.40</td>
+<td style="text-align: right;">1.82</td>
+<td style="text-align: right;">3.21</td>
+<td style="text-align: right;">17.80</td>
+<td style="text-align: right;">2.09</td>
+<td style="text-align: right;">37.37</td>
+<td style="text-align: right;">26.71</td>
+<td style="text-align: right;">1.78</td>
+<td style="text-align: right;">1.85</td>
+<td style="text-align: right;">1.80</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.72</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">142.55</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">90.32</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">0.64</td>
+<td style="text-align: right;">1.28</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">2.43</td>
+<td style="text-align: right;">2.47</td>
+<td style="text-align: right;">2.40</td>
+<td style="text-align: right;">1535</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">208</td>
+<td style="text-align: right;">289</td>
+<td style="text-align: right;">930</td>
+<td style="text-align: right;">202</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">168</td>
+<td style="text-align: right;">972</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">164056</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">543.57</td>
+<td style="text-align: right;">49.64</td>
+<td style="text-align: right;">47.96</td>
+<td style="text-align: right;">49.64</td>
+<td style="text-align: right;">47.99</td>
+<td style="text-align: right;">493</td>
+<td style="text-align: right;">254</td>
+<td style="text-align: right;">295</td>
+<td style="text-align: right;">1042</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">536</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">16.09</td>
+<td style="text-align: right;">19.00</td>
+<td style="text-align: right;">14.56</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1050.49</td>
+<td style="text-align: right;">747</td>
+<td style="text-align: right;">751.99</td>
+<td style="text-align: right;">7.23</td>
+<td style="text-align: right;">11.47</td>
+<td style="text-align: right;">11.94</td>
+<td style="text-align: right;">44.93</td>
+<td style="text-align: right;">45.17</td>
+<td style="text-align: right;">44.37</td>
+<td style="text-align: right;">622.51</td>
+<td style="text-align: right;">51.88</td>
+<td style="text-align: right;">50.19</td>
+<td style="text-align: right;">51.71</td>
+<td style="text-align: right;">50.03</td>
+<td style="text-align: right;">565</td>
+<td style="text-align: right;">286</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">1196</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">637</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">17.96</td>
+<td style="text-align: right;">19.50</td>
+<td style="text-align: right;">14.41</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1185.42</td>
+<td style="text-align: right;">851</td>
+<td style="text-align: right;">844.21</td>
+<td style="text-align: right;">7.88</td>
+<td style="text-align: right;">11.11</td>
+<td style="text-align: right;">11.11</td>
+<td style="text-align: right;">48.65</td>
+<td style="text-align: right;">48.37</td>
+<td style="text-align: right;">47.72</td>
+<td style="text-align: right;">121.70</td>
+<td style="text-align: right;">119.55</td>
+<td style="text-align: right;">2715</td>
+<td style="text-align: right;">2625</td>
+<td style="text-align: right;">8.56</td>
+<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8480950</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Ilya Lyubushkin</td>
+<td style="text-align: left;">DAL</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">4on5</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">10699</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">11.95</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0.19</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">3.16</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">2.42</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">118</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10137</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">29.50</td>
+<td style="text-align: right;">3.07</td>
+<td style="text-align: right;">2.97</td>
+<td style="text-align: right;">3.07</td>
+<td style="text-align: right;">2.97</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">1.63</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">38.00</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">37.00</td>
+<td style="text-align: right;">0.33</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">3.20</td>
+<td style="text-align: right;">3.20</td>
+<td style="text-align: right;">3.11</td>
+<td style="text-align: right;">172.75</td>
+<td style="text-align: right;">20.52</td>
+<td style="text-align: right;">19.32</td>
+<td style="text-align: right;">20.52</td>
+<td style="text-align: right;">19.32</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">312</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">169</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">4.64</td>
+<td style="text-align: right;">4.32</td>
+<td style="text-align: right;">11.55</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">312.00</td>
+<td style="text-align: right;">235</td>
+<td style="text-align: right;">235.00</td>
+<td style="text-align: right;">4.05</td>
+<td style="text-align: right;">4.80</td>
+<td style="text-align: right;">4.80</td>
+<td style="text-align: right;">19.77</td>
+<td style="text-align: right;">19.77</td>
+<td style="text-align: right;">19.16</td>
+<td style="text-align: right;">2.29</td>
+<td style="text-align: right;">15.44</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">222</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8480950</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: left;">Ilya Lyubushkin</td>
+<td style="text-align: left;">DAL</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">5on4</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">4.75</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.88</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6478</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.69</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">11.43</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(skaters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    playerId           season         name               team          
+ Min.   :8470600   Min.   :2024   Length:4600        Length:4600       
+ 1st Qu.:8477426   1st Qu.:2024   Class :character   Class :character  
+ Median :8479593   Median :2024   Mode  :character   Mode  :character  
+ Mean   :8479531   Mean   :2024                                        
+ 3rd Qu.:8482057   3rd Qu.:2024                                        
+ Max.   :8485512   Max.   :2024                                        
+   position          situation          games_played      icetime        
+ Length:4600        Length:4600        Min.   : 1.00   Min.   :     0.0  
+ Class :character   Class :character   1st Qu.:21.00   1st Qu.:   401.8  
+ Mode  :character   Mode  :character   Median :63.00   Median :  4226.0  
+                                       Mean   :51.33   Mean   : 20354.0  
+                                       3rd Qu.:78.00   3rd Qu.: 34109.8  
+                                       Max.   :85.00   Max.   :129982.0  
+     shifts         gameScore      onIce_xGoalsPercentage
+ Min.   :   0.0   Min.   : -6.50   Min.   :0.0000        
+ 1st Qu.:  14.0   1st Qu.:  0.90   1st Qu.:0.1300        
+ Median :  83.0   Median :  9.54   Median :0.4700        
+ Mean   : 425.3   Mean   : 19.26   Mean   :0.4321        
+ 3rd Qu.: 764.5   3rd Qu.: 31.25   3rd Qu.:0.5700        
+ Max.   :2658.0   Max.   :134.88   Max.   :1.0000        
+ offIce_xGoalsPercentage onIce_corsiPercentage offIce_corsiPercentage
+ Min.   :0.0000          Min.   :0.0000        Min.   :0.0000        
+ 1st Qu.:0.3300          1st Qu.:0.1800        1st Qu.:0.3300        
+ Median :0.4900          Median :0.4800        Median :0.4900        
+ Mean   :0.4691          Mean   :0.4392        Mean   :0.4652        
+ 3rd Qu.:0.5700          3rd Qu.:0.5800        3rd Qu.:0.5500        
+ Max.   :1.0000          Max.   :1.0000        Max.   :1.0000        
+ onIce_fenwickPercentage offIce_fenwickPercentage  iceTimeRank   
+ Min.   :0.0000          Min.   :0.0000           Min.   :  0.0  
+ 1st Qu.:0.1900          1st Qu.:0.3400           1st Qu.: 43.0  
+ Median :0.4800          Median :0.4900           Median :148.0  
+ Mean   :0.4333          Mean   :0.4655           Mean   :181.5  
+ 3rd Qu.:0.5700          3rd Qu.:0.5500           3rd Qu.:251.0  
+ Max.   :1.0000          Max.   :1.0000           Max.   :894.0  
+  I_F_xOnGoal        I_F_xGoals     I_F_xRebounds     I_F_xFreeze    
+ Min.   :  0.000   Min.   : 0.000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.:  0.000   1st Qu.: 0.000   1st Qu.: 0.000   1st Qu.: 0.000  
+ Median :  5.955   Median : 0.730   Median : 0.375   Median : 1.185  
+ Mean   : 35.416   Mean   : 3.522   Mean   : 2.367   Mean   : 8.589  
+ 3rd Qu.: 51.270   3rd Qu.: 4.360   3rd Qu.: 3.500   3rd Qu.:12.680  
+ Max.   :323.890   Max.   :41.050   Max.   :23.190   Max.   :85.680  
+ I_F_xPlayStopped I_F_xPlayContinuedInZone I_F_xPlayContinuedOutsideZone
+ Min.   : 0.000   Min.   :  0.00           Min.   :  0.00               
+ 1st Qu.: 0.000   1st Qu.:  0.00           1st Qu.:  0.00               
+ Median : 0.200   Median :  2.72           Median :  2.61               
+ Mean   : 1.195   Mean   : 19.15           Mean   : 13.85               
+ 3rd Qu.: 1.750   3rd Qu.: 28.79           3rd Qu.: 19.66               
+ Max.   :10.970   Max.   :181.42           Max.   :124.49               
+ I_F_flurryAdjustedxGoals I_F_scoreVenueAdjustedxGoals
+ Min.   : 0.000           Min.   : 0.000              
+ 1st Qu.: 0.000           1st Qu.: 0.000              
+ Median : 0.680           Median : 0.725              
+ Mean   : 3.343           Mean   : 3.533              
+ 3rd Qu.: 4.070           3rd Qu.: 4.360              
+ Max.   :38.000           Max.   :41.140              
+ I_F_flurryScoreVenueAdjustedxGoals I_F_primaryAssists I_F_secondaryAssists
+ Min.   : 0.000                     Min.   : 0.000     Min.   : 0.000      
+ 1st Qu.: 0.000                     1st Qu.: 0.000     1st Qu.: 0.000      
+ Median : 0.675                     Median : 1.000     Median : 0.000      
+ Mean   : 3.353                     Mean   : 3.193     Mean   : 2.559      
+ 3rd Qu.: 4.070                     3rd Qu.: 4.000     3rd Qu.: 3.000      
+ Max.   :38.080                     Max.   :56.000     Max.   :39.000      
+ I_F_shotsOnGoal  I_F_missedShots I_F_blockedShotAttempts I_F_shotAttempts
+ Min.   :  0.00   Min.   :  0.0   Min.   :  0.00          Min.   :  0.00  
+ 1st Qu.:  0.00   1st Qu.:  0.0   1st Qu.:  0.00          1st Qu.:  1.00  
+ Median :  6.00   Median :  3.0   Median :  2.00          Median : 10.00  
+ Mean   : 32.17   Mean   : 16.5   Mean   : 19.05          Mean   : 67.72  
+ 3rd Qu.: 46.00   3rd Qu.: 24.0   3rd Qu.: 27.00          3rd Qu.:101.00  
+ Max.   :320.00   Max.   :161.0   Max.   :231.00          Max.   :638.00  
+   I_F_points        I_F_goals       I_F_rebounds    I_F_reboundGoals 
+ Min.   :  0.000   Min.   : 0.000   Min.   : 0.000   Min.   : 0.0000  
+ 1st Qu.:  0.000   1st Qu.: 0.000   1st Qu.: 0.000   1st Qu.: 0.0000  
+ Median :  2.000   Median : 1.000   Median : 0.000   Median : 0.0000  
+ Mean   :  9.169   Mean   : 3.417   Mean   : 3.634   Mean   : 0.4259  
+ 3rd Qu.: 13.000   3rd Qu.: 4.000   3rd Qu.: 5.000   3rd Qu.: 0.0000  
+ Max.   :121.000   Max.   :52.000   Max.   :44.000   Max.   :10.0000  
+   I_F_freeze     I_F_playStopped  I_F_playContinuedInZone
+ Min.   : 0.000   Min.   :0.0000   Min.   :  0.00         
+ 1st Qu.: 0.000   1st Qu.:0.0000   1st Qu.:  0.00         
+ Median : 1.000   Median :0.0000   Median :  2.00         
+ Mean   : 6.724   Mean   :0.1033   Mean   : 15.47         
+ 3rd Qu.:10.000   3rd Qu.:0.0000   3rd Qu.: 22.00         
+ Max.   :90.000   Max.   :3.0000   Max.   :168.00         
+ I_F_playContinuedOutsideZone I_F_savedShotsOnGoal
+ Min.   :  0.00               Min.   :  0.00      
+ 1st Qu.:  0.00               1st Qu.:  0.00      
+ Median :  4.00               Median :  5.00      
+ Mean   : 19.32               Mean   : 28.76      
+ 3rd Qu.: 28.00               3rd Qu.: 42.00      
+ Max.   :186.00               Max.   :288.00      
+ I_F_savedUnblockedShotAttempts   penalties      I_F_penalityMinutes
+ Min.   :  0.00                 Min.   : 0.000   Min.   :  0.000    
+ 1st Qu.:  0.00                 1st Qu.: 0.000   1st Qu.:  0.000    
+ Median :  8.00                 Median : 0.000   Median :  0.000    
+ Mean   : 45.26                 Mean   : 3.703   Mean   :  8.312    
+ 3rd Qu.: 66.00                 3rd Qu.: 5.000   3rd Qu.: 11.250    
+ Max.   :411.00                 Max.   :47.000   Max.   :129.000    
+ I_F_faceOffsWon      I_F_hits      I_F_takeaways    I_F_giveaways   
+ Min.   :   0.00   Min.   :  0.00   Min.   : 0.000   Min.   :  0.00  
+ 1st Qu.:   0.00   1st Qu.:  0.00   1st Qu.: 0.000   1st Qu.:  0.00  
+ Median :   0.00   Median :  2.00   Median : 1.000   Median :  2.00  
+ Mean   :  32.24   Mean   : 24.46   Mean   : 5.482   Mean   : 16.75  
+ 3rd Qu.:   6.00   3rd Qu.: 28.00   3rd Qu.: 7.000   3rd Qu.: 26.00  
+ Max.   :1016.00   Max.   :462.00   Max.   :61.000   Max.   :159.00  
+ I_F_lowDangerShots I_F_mediumDangerShots I_F_highDangerShots
+ Min.   :  0.00     Min.   :  0.000       Min.   : 0.000     
+ 1st Qu.:  0.00     1st Qu.:  0.000       1st Qu.: 0.000     
+ Median :  5.00     Median :  1.000       Median : 1.000     
+ Mean   : 35.75     Mean   :  8.941       Mean   : 3.986     
+ 3rd Qu.: 54.00     3rd Qu.:  8.000       3rd Qu.: 4.000     
+ Max.   :383.00     Max.   :105.000       Max.   :58.000     
+ I_F_lowDangerxGoals I_F_mediumDangerxGoals I_F_highDangerxGoals
+ Min.   : 0.000      Min.   : 0.0000        Min.   : 0.000      
+ 1st Qu.: 0.000      1st Qu.: 0.0000        1st Qu.: 0.000      
+ Median : 0.150      Median : 0.1400        Median : 0.200      
+ Mean   : 1.021      Mean   : 1.1127        Mean   : 1.388      
+ 3rd Qu.: 1.410      3rd Qu.: 0.9925        3rd Qu.: 1.710      
+ Max.   :11.600      Max.   :13.9600        Max.   :20.950      
+ I_F_lowDangerGoals I_F_mediumDangerGoals I_F_highDangerGoals
+ Min.   : 0.000     Min.   : 0.000        Min.   : 0.000     
+ 1st Qu.: 0.000     1st Qu.: 0.000        1st Qu.: 0.000     
+ Median : 0.000     Median : 0.000        Median : 0.000     
+ Mean   : 1.249     Mean   : 1.145        Mean   : 1.023     
+ 3rd Qu.: 1.000     3rd Qu.: 1.000        3rd Qu.: 1.000     
+ Max.   :19.000     Max.   :22.000        Max.   :19.000     
+ I_F_scoreAdjustedShotsAttempts I_F_unblockedShotAttempts
+ Min.   :  0.00                 Min.   :  0.00           
+ 1st Qu.:  1.00                 1st Qu.:  0.00           
+ Median : 10.02                 Median :  8.00           
+ Mean   : 67.85                 Mean   : 48.67           
+ 3rd Qu.:101.00                 3rd Qu.: 71.00           
+ Max.   :638.41                 Max.   :444.00           
+ I_F_scoreAdjustedUnblockedShotAttempts I_F_dZoneGiveaways
+ Min.   :  0.00                         Min.   :  0.000   
+ 1st Qu.:  0.00                         1st Qu.:  0.000   
+ Median :  8.00                         Median :  1.000   
+ Mean   : 48.80                         Mean   :  7.604   
+ 3rd Qu.: 71.17                         3rd Qu.:  9.000   
+ Max.   :443.10                         Max.   :108.000   
+ I_F_xGoalsFromxReboundsOfShots I_F_xGoalsFromActualReboundsOfShots
+ Min.   :0.0000                 Min.   : 0.0000                    
+ 1st Qu.:0.0000                 1st Qu.: 0.0000                    
+ Median :0.0900                 Median : 0.0000                    
+ Mean   :0.5251                 Mean   : 0.7726                    
+ 3rd Qu.:0.7725                 3rd Qu.: 1.0600                    
+ Max.   :5.5300                 Max.   :10.2400                    
+ I_F_reboundxGoals I_F_xGoals_with_earned_rebounds
+ Min.   : 0.0000   Min.   : 0.000                 
+ 1st Qu.: 0.0000   1st Qu.: 0.000                 
+ Median : 0.0000   Median : 0.710                 
+ Mean   : 0.7737   Mean   : 3.273                 
+ 3rd Qu.: 0.7725   3rd Qu.: 4.210                 
+ Max.   :11.6200   Max.   :36.780                 
+ I_F_xGoals_with_earned_rebounds_scoreAdjusted
+ Min.   : 0.000                               
+ 1st Qu.: 0.000                               
+ Median : 0.710                               
+ Mean   : 3.282                               
+ 3rd Qu.: 4.235                               
+ Max.   :36.850                               
+ I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted   I_F_shifts    
+ Min.   : 0.000                                      Min.   :   0.0  
+ 1st Qu.: 0.000                                      1st Qu.:  14.0  
+ Median : 0.680                                      Median :  83.0  
+ Mean   : 3.188                                      Mean   : 425.3  
+ 3rd Qu.: 4.080                                      3rd Qu.: 764.5  
+ Max.   :34.760                                      Max.   :2658.0  
+ I_F_oZoneShiftStarts I_F_dZoneShiftStarts I_F_neutralZoneShiftStarts
+ Min.   :  0.00       Min.   :  0.00       Min.   :  0.00            
+ 1st Qu.:  1.00       1st Qu.:  1.00       1st Qu.:  1.00            
+ Median :  8.00       Median :  8.00       Median :  7.00            
+ Mean   : 55.01       Mean   : 53.56       Mean   : 65.74            
+ 3rd Qu.: 83.00       3rd Qu.: 90.00       3rd Qu.:118.00            
+ Max.   :469.00       Max.   :530.00       Max.   :456.00            
+ I_F_flyShiftStarts I_F_oZoneShiftEnds I_F_dZoneShiftEnds
+ Min.   :   0.0     Min.   :  0.00     Min.   :  0.00    
+ 1st Qu.:   9.0     1st Qu.:  1.00     1st Qu.:  2.00    
+ Median :  38.0     Median :  7.00     Median :  9.00    
+ Mean   : 251.0     Mean   : 55.28     Mean   : 56.61    
+ 3rd Qu.: 490.8     3rd Qu.:101.25     3rd Qu.:104.00    
+ Max.   :1589.0     Max.   :358.00     Max.   :363.00    
+ I_F_neutralZoneShiftEnds I_F_flyShiftEnds  faceoffsWon       faceoffsLost   
+ Min.   :  0.00           Min.   :   0.0   Min.   :   0.00   Min.   :  0.00  
+ 1st Qu.:  2.00           1st Qu.:   8.0   1st Qu.:   0.00   1st Qu.:  0.00  
+ Median : 15.00           Median :  49.0   Median :   0.00   Median :  0.00  
+ Mean   : 60.43           Mean   : 253.0   Mean   :  32.24   Mean   : 31.25  
+ 3rd Qu.: 93.00           3rd Qu.: 453.5   3rd Qu.:   6.00   3rd Qu.:  7.00  
+ Max.   :403.00           Max.   :1818.0   Max.   :1016.00   Max.   :790.00  
+  timeOnBench     penalityMinutes   penalityMinutesDrawn penaltiesDrawn  
+ Min.   :     0   Min.   :  0.000   Min.   : 0.000       Min.   : 0.000  
+ 1st Qu.:  2732   1st Qu.:  0.000   1st Qu.: 0.000       1st Qu.: 0.000  
+ Median :  7849   Median :  0.000   Median : 0.000       Median : 0.000  
+ Mean   : 52136   Mean   :  8.312   Mean   : 7.537       Mean   : 3.351  
+ 3rd Qu.:110362   3rd Qu.: 11.250   3rd Qu.:10.000       3rd Qu.: 4.000  
+ Max.   :251375   Max.   :129.000   Max.   :97.000       Max.   :38.000  
+ shotsBlockedByPlayer OnIce_F_xOnGoal    OnIce_F_xGoals   
+ Min.   :  0.0        Min.   :   0.000   Min.   :  0.000  
+ 1st Qu.:  0.0        1st Qu.:   2.595   1st Qu.:  0.270  
+ Median :  2.0        Median :  28.595   Median :  4.115  
+ Mean   : 16.9        Mean   : 176.086   Mean   : 17.538  
+ 3rd Qu.: 22.0        3rd Qu.: 265.140   3rd Qu.: 26.765  
+ Max.   :211.0        Max.   :1331.880   Max.   :144.550  
+ OnIce_F_flurryAdjustedxGoals OnIce_F_scoreVenueAdjustedxGoals
+ Min.   :  0.000              Min.   :  0.0000                
+ 1st Qu.:  0.260              1st Qu.:  0.2775                
+ Median :  3.885              Median :  4.0850                
+ Mean   : 16.631              Mean   : 17.5921                
+ 3rd Qu.: 25.172              3rd Qu.: 26.8600                
+ Max.   :134.740              Max.   :145.0000                
+ OnIce_F_flurryScoreVenueAdjustedxGoals OnIce_F_shotsOnGoal OnIce_F_missedShots
+ Min.   :  0.00                         Min.   :   0.0      Min.   :  0.0      
+ 1st Qu.:  0.26                         1st Qu.:   2.0      1st Qu.:  1.0      
+ Median :  3.89                         Median :  27.0      Median : 12.0      
+ Mean   : 16.68                         Mean   : 159.8      Mean   : 82.3      
+ 3rd Qu.: 25.34                         3rd Qu.: 243.0      3rd Qu.:122.2      
+ Max.   :135.15                         Max.   :1258.0      Max.   :585.0      
+ OnIce_F_blockedShotAttempts OnIce_F_shotAttempts OnIce_F_goals   
+ Min.   :  0.00              Min.   :   0.0       Min.   :  0.00  
+ 1st Qu.:  1.00              1st Qu.:   5.0       1st Qu.:  0.00  
+ Median : 14.00              Median :  51.0       Median :  4.00  
+ Mean   : 95.38              Mean   : 337.5       Mean   : 16.91  
+ 3rd Qu.:148.00              3rd Qu.: 502.2       3rd Qu.: 25.00  
+ Max.   :712.00              Max.   :2507.0       Max.   :153.00  
+ OnIce_F_rebounds OnIce_F_reboundGoals OnIce_F_lowDangerShots
+ Min.   :  0.00   Min.   : 0.000       Min.   :   0.0        
+ 1st Qu.:  0.00   1st Qu.: 0.000       1st Qu.:   2.0        
+ Median :  3.00   Median : 0.000       Median :  26.0        
+ Mean   : 18.17   Mean   : 2.122       Mean   : 177.8        
+ 3rd Qu.: 28.00   3rd Qu.: 3.000       3rd Qu.: 277.0        
+ Max.   :153.00   Max.   :20.000       Max.   :1338.0        
+ OnIce_F_mediumDangerShots OnIce_F_highDangerShots OnIce_F_lowDangerxGoals
+ Min.   :  0.0             Min.   :  0.0           Min.   : 0.000         
+ 1st Qu.:  0.0             1st Qu.:  0.0           1st Qu.: 0.060         
+ Median :  8.0             Median :  5.0           Median : 0.780         
+ Mean   : 44.4             Mean   : 19.9           Mean   : 5.074         
+ 3rd Qu.: 65.0             3rd Qu.: 31.0           3rd Qu.: 7.640         
+ Max.   :348.0             Max.   :175.0           Max.   :40.540         
+ OnIce_F_mediumDangerxGoals OnIce_F_highDangerxGoals OnIce_F_lowDangerGoals
+ Min.   : 0.000             Min.   : 0.000           Min.   : 0.000        
+ 1st Qu.: 0.000             1st Qu.: 0.000           1st Qu.: 0.000        
+ Median : 0.960             Median : 1.875           Median : 1.000        
+ Mean   : 5.526             Mean   : 6.939           Mean   : 6.173        
+ 3rd Qu.: 7.990             3rd Qu.:10.860           3rd Qu.: 8.000        
+ Max.   :43.020             Max.   :66.290           Max.   :58.000        
+ OnIce_F_mediumDangerGoals OnIce_F_highDangerGoals
+ Min.   : 0.000            Min.   : 0.000         
+ 1st Qu.: 0.000            1st Qu.: 0.000         
+ Median : 1.000            Median : 1.000         
+ Mean   : 5.646            Mean   : 5.092         
+ 3rd Qu.: 8.000            3rd Qu.: 7.000         
+ Max.   :51.000            Max.   :57.000         
+ OnIce_F_scoreAdjustedShotsAttempts OnIce_F_unblockedShotAttempts
+ Min.   :   0.0                     Min.   :   0.0               
+ 1st Qu.:   5.0                     1st Qu.:   4.0               
+ Median :  51.0                     Median :  39.0               
+ Mean   : 338.1                     Mean   : 242.1               
+ 3rd Qu.: 503.3                     3rd Qu.: 363.5               
+ Max.   :2505.7                     Max.   :1807.0               
+ OnIce_F_scoreAdjustedUnblockedShotAttempts OnIce_F_xGoalsFromxReboundsOfShots
+ Min.   :   0.00                            Min.   : 0.000                    
+ 1st Qu.:   3.88                            1st Qu.: 0.040                    
+ Median :  39.00                            Median : 0.450                    
+ Mean   : 242.71                            Mean   : 2.623                    
+ 3rd Qu.: 362.32                            3rd Qu.: 4.320                    
+ Max.   :1812.00                            Max.   :21.150                    
+ OnIce_F_xGoalsFromActualReboundsOfShots OnIce_F_reboundxGoals
+ Min.   : 0.000                          Min.   : 0.000       
+ 1st Qu.: 0.000                          1st Qu.: 0.000       
+ Median : 0.660                          Median : 0.675       
+ Mean   : 3.871                          Mean   : 3.878       
+ 3rd Qu.: 6.180                          3rd Qu.: 6.183       
+ Max.   :35.770                          Max.   :35.770       
+ OnIce_F_xGoals_with_earned_rebounds
+ Min.   :  0.00                     
+ 1st Qu.:  0.28                     
+ Median :  3.85                     
+ Mean   : 16.28                     
+ 3rd Qu.: 24.91                     
+ Max.   :132.40                     
+ OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted
+ Min.   :  0.0000                                 
+ 1st Qu.:  0.2875                                 
+ Median :  3.8500                                 
+ Mean   : 16.3266                                 
+ 3rd Qu.: 24.9450                                 
+ Max.   :132.6100                                 
+ OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted OnIce_A_xOnGoal   
+ Min.   :  0.000                                         Min.   :   0.000  
+ 1st Qu.:  0.270                                         1st Qu.:   2.925  
+ Median :  3.755                                         Median :  34.155  
+ Mean   : 15.848                                         Mean   : 171.304  
+ 3rd Qu.: 24.238                                         3rd Qu.: 279.928  
+ Max.   :127.470                                         Max.   :1212.600  
+ OnIce_A_xGoals    OnIce_A_flurryAdjustedxGoals
+ Min.   :  0.000   Min.   :  0.0000            
+ 1st Qu.:  0.320   1st Qu.:  0.3175            
+ Median :  4.645   Median :  4.3500            
+ Mean   : 17.016   Mean   : 16.1811            
+ 3rd Qu.: 25.775   3rd Qu.: 24.5025            
+ Max.   :138.470   Max.   :126.6800            
+ OnIce_A_scoreVenueAdjustedxGoals OnIce_A_flurryScoreVenueAdjustedxGoals
+ Min.   :  0.00                   Min.   :  0.0000                      
+ 1st Qu.:  0.32                   1st Qu.:  0.3175                      
+ Median :  4.67                   Median :  4.3400                      
+ Mean   : 17.07                   Mean   : 16.2325                      
+ 3rd Qu.: 25.90                   3rd Qu.: 24.5175                      
+ Max.   :139.18                   Max.   :127.3600                      
+ OnIce_A_shotsOnGoal OnIce_A_missedShots OnIce_A_blockedShotAttempts
+ Min.   :   0.0      Min.   :  0.00      Min.   :  0.00             
+ 1st Qu.:   3.0      1st Qu.:  1.00      1st Qu.:  1.00             
+ Median :  32.5      Median : 14.00      Median : 16.00             
+ Mean   : 155.5      Mean   : 80.12      Mean   : 92.77             
+ 3rd Qu.: 253.5      3rd Qu.:131.00      3rd Qu.:161.00             
+ Max.   :1121.0      Max.   :558.00      Max.   :668.00             
+ OnIce_A_shotAttempts OnIce_A_goals    OnIce_A_rebounds OnIce_A_reboundGoals
+ Min.   :   0.0       Min.   :  0.00   Min.   :  0.00   Min.   : 0.00       
+ 1st Qu.:   5.0       1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.: 0.00       
+ Median :  61.0       Median :  4.00   Median :  3.00   Median : 0.00       
+ Mean   : 328.4       Mean   : 16.43   Mean   : 17.49   Mean   : 2.03       
+ 3rd Qu.: 547.2       3rd Qu.: 25.00   3rd Qu.: 28.00   3rd Qu.: 3.00       
+ Max.   :2300.0       Max.   :130.00   Max.   :138.00   Max.   :21.00       
+ OnIce_A_lowDangerShots OnIce_A_mediumDangerShots OnIce_A_highDangerShots
+ Min.   :   0.0         Min.   :  0.00            Min.   :  0.00         
+ 1st Qu.:   2.0         1st Qu.:  1.00            1st Qu.:  0.00         
+ Median :  29.0         Median :  9.00            Median :  6.00         
+ Mean   : 173.5         Mean   : 42.91            Mean   : 19.24         
+ 3rd Qu.: 289.2         3rd Qu.: 70.00            3rd Qu.: 31.00         
+ Max.   :1220.0         Max.   :342.00            Max.   :161.00         
+ OnIce_A_lowDangerxGoals OnIce_A_mediumDangerxGoals OnIce_A_highDangerxGoals
+ Min.   : 0.000          Min.   : 0.000             Min.   : 0.000          
+ 1st Qu.: 0.080          1st Qu.: 0.100             1st Qu.: 0.000          
+ Median : 0.910          Median : 1.170             Median : 2.080          
+ Mean   : 4.947          Mean   : 5.345             Mean   : 6.724          
+ 3rd Qu.: 8.133          3rd Qu.: 8.723             3rd Qu.:10.735          
+ Max.   :36.790          Max.   :43.100             Max.   :60.830          
+ OnIce_A_lowDangerGoals OnIce_A_mediumDangerGoals OnIce_A_highDangerGoals
+ Min.   : 0.000         Min.   : 0.00             Min.   : 0.000         
+ 1st Qu.: 0.000         1st Qu.: 0.00             1st Qu.: 0.000         
+ Median : 1.000         Median : 1.00             Median : 1.000         
+ Mean   : 6.074         Mean   : 5.45             Mean   : 4.904         
+ 3rd Qu.:10.000         3rd Qu.: 8.00             3rd Qu.: 7.000         
+ Max.   :52.000         Max.   :47.00             Max.   :49.000         
+ OnIce_A_scoreAdjustedShotsAttempts OnIce_A_unblockedShotAttempts
+ Min.   :   0.0                     Min.   :   0.0               
+ 1st Qu.:   5.0                     1st Qu.:   4.0               
+ Median :  61.0                     Median :  47.0               
+ Mean   : 329.1                     Mean   : 235.7               
+ 3rd Qu.: 548.8                     3rd Qu.: 385.0               
+ Max.   :2309.3                     Max.   :1666.0               
+ OnIce_A_scoreAdjustedUnblockedShotAttempts OnIce_A_xGoalsFromxReboundsOfShots
+ Min.   :   0.0                             Min.   : 0.000                    
+ 1st Qu.:   4.0                             1st Qu.: 0.050                    
+ Median :  47.0                             Median : 0.550                    
+ Mean   : 236.3                             Mean   : 2.493                    
+ 3rd Qu.: 385.6                             3rd Qu.: 4.122                    
+ Max.   :1673.7                             Max.   :19.680                    
+ OnIce_A_xGoalsFromActualReboundsOfShots OnIce_A_reboundxGoals
+ Min.   : 0.000                          Min.   : 0.000       
+ 1st Qu.: 0.000                          1st Qu.: 0.000       
+ Median : 0.760                          Median : 0.760       
+ Mean   : 3.700                          Mean   : 3.707       
+ 3rd Qu.: 5.835                          3rd Qu.: 5.830       
+ Max.   :32.350                          Max.   :32.350       
+ OnIce_A_xGoals_with_earned_rebounds
+ Min.   :  0.00                     
+ 1st Qu.:  0.33                     
+ Median :  4.30                     
+ Mean   : 15.80                     
+ 3rd Qu.: 24.25                     
+ Max.   :126.40                     
+ OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted
+ Min.   :  0.00                                   
+ 1st Qu.:  0.32                                   
+ Median :  4.30                                   
+ Mean   : 15.85                                   
+ 3rd Qu.: 24.24                                   
+ Max.   :126.98                                   
+ OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted OffIce_F_xGoals 
+ Min.   :  0.00                                          Min.   :  0.00  
+ 1st Qu.:  0.31                                          1st Qu.:  2.03  
+ Median :  4.12                                          Median : 11.57  
+ Mean   : 15.41                                          Mean   : 42.30  
+ 3rd Qu.: 23.53                                          3rd Qu.: 81.43  
+ Max.   :121.45                                          Max.   :249.51  
+ OffIce_A_xGoals  OffIce_F_shotAttempts OffIce_A_shotAttempts
+ Min.   :  0.00   Min.   :   0.0        Min.   :   0.0       
+ 1st Qu.:  1.80   1st Qu.:  33.0        1st Qu.:  28.0       
+ Median : 11.91   Median : 123.0        Median : 133.0       
+ Mean   : 42.72   Mean   : 842.5        Mean   : 850.4       
+ 3rd Qu.: 83.28   3rd Qu.:1745.5        3rd Qu.:1773.0       
+ Max.   :238.13   Max.   :4697.0        Max.   :4312.0       
+ xGoalsForAfterShifts xGoalsAgainstAfterShifts corsiForAfterShifts
+ Min.   :0.0000       Min.   :0.0000           Min.   :  0.000    
+ 1st Qu.:0.0000       1st Qu.:0.0000           1st Qu.:  0.000    
+ Median :0.0000       Median :0.0000           Median :  0.000    
+ Mean   :0.4003       Mean   :0.1632           Mean   :  9.087    
+ 3rd Qu.:0.1000       3rd Qu.:0.0300           3rd Qu.:  2.000    
+ Max.   :9.2900       Max.   :3.8100           Max.   :223.000    
+ corsiAgainstAfterShifts fenwickForAfterShifts fenwickAgainstAfterShifts
+ Min.   : 0.000          Min.   :  0.000       Min.   : 0.000           
+ 1st Qu.: 0.000          1st Qu.:  0.000       1st Qu.: 0.000           
+ Median : 0.000          Median :  0.000       Median : 0.000           
+ Mean   : 4.028          Mean   :  6.903       Mean   : 3.149           
+ 3rd Qu.: 1.000          3rd Qu.:  2.000       3rd Qu.: 1.000           
+ Max.   :79.000          Max.   :163.000       Max.   :62.000           </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(skaters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "playerId"                                               
+  [2] "season"                                                 
+  [3] "name"                                                   
+  [4] "team"                                                   
+  [5] "position"                                               
+  [6] "situation"                                              
+  [7] "games_played"                                           
+  [8] "icetime"                                                
+  [9] "shifts"                                                 
+ [10] "gameScore"                                              
+ [11] "onIce_xGoalsPercentage"                                 
+ [12] "offIce_xGoalsPercentage"                                
+ [13] "onIce_corsiPercentage"                                  
+ [14] "offIce_corsiPercentage"                                 
+ [15] "onIce_fenwickPercentage"                                
+ [16] "offIce_fenwickPercentage"                               
+ [17] "iceTimeRank"                                            
+ [18] "I_F_xOnGoal"                                            
+ [19] "I_F_xGoals"                                             
+ [20] "I_F_xRebounds"                                          
+ [21] "I_F_xFreeze"                                            
+ [22] "I_F_xPlayStopped"                                       
+ [23] "I_F_xPlayContinuedInZone"                               
+ [24] "I_F_xPlayContinuedOutsideZone"                          
+ [25] "I_F_flurryAdjustedxGoals"                               
+ [26] "I_F_scoreVenueAdjustedxGoals"                           
+ [27] "I_F_flurryScoreVenueAdjustedxGoals"                     
+ [28] "I_F_primaryAssists"                                     
+ [29] "I_F_secondaryAssists"                                   
+ [30] "I_F_shotsOnGoal"                                        
+ [31] "I_F_missedShots"                                        
+ [32] "I_F_blockedShotAttempts"                                
+ [33] "I_F_shotAttempts"                                       
+ [34] "I_F_points"                                             
+ [35] "I_F_goals"                                              
+ [36] "I_F_rebounds"                                           
+ [37] "I_F_reboundGoals"                                       
+ [38] "I_F_freeze"                                             
+ [39] "I_F_playStopped"                                        
+ [40] "I_F_playContinuedInZone"                                
+ [41] "I_F_playContinuedOutsideZone"                           
+ [42] "I_F_savedShotsOnGoal"                                   
+ [43] "I_F_savedUnblockedShotAttempts"                         
+ [44] "penalties"                                              
+ [45] "I_F_penalityMinutes"                                    
+ [46] "I_F_faceOffsWon"                                        
+ [47] "I_F_hits"                                               
+ [48] "I_F_takeaways"                                          
+ [49] "I_F_giveaways"                                          
+ [50] "I_F_lowDangerShots"                                     
+ [51] "I_F_mediumDangerShots"                                  
+ [52] "I_F_highDangerShots"                                    
+ [53] "I_F_lowDangerxGoals"                                    
+ [54] "I_F_mediumDangerxGoals"                                 
+ [55] "I_F_highDangerxGoals"                                   
+ [56] "I_F_lowDangerGoals"                                     
+ [57] "I_F_mediumDangerGoals"                                  
+ [58] "I_F_highDangerGoals"                                    
+ [59] "I_F_scoreAdjustedShotsAttempts"                         
+ [60] "I_F_unblockedShotAttempts"                              
+ [61] "I_F_scoreAdjustedUnblockedShotAttempts"                 
+ [62] "I_F_dZoneGiveaways"                                     
+ [63] "I_F_xGoalsFromxReboundsOfShots"                         
+ [64] "I_F_xGoalsFromActualReboundsOfShots"                    
+ [65] "I_F_reboundxGoals"                                      
+ [66] "I_F_xGoals_with_earned_rebounds"                        
+ [67] "I_F_xGoals_with_earned_rebounds_scoreAdjusted"          
+ [68] "I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted"    
+ [69] "I_F_shifts"                                             
+ [70] "I_F_oZoneShiftStarts"                                   
+ [71] "I_F_dZoneShiftStarts"                                   
+ [72] "I_F_neutralZoneShiftStarts"                             
+ [73] "I_F_flyShiftStarts"                                     
+ [74] "I_F_oZoneShiftEnds"                                     
+ [75] "I_F_dZoneShiftEnds"                                     
+ [76] "I_F_neutralZoneShiftEnds"                               
+ [77] "I_F_flyShiftEnds"                                       
+ [78] "faceoffsWon"                                            
+ [79] "faceoffsLost"                                           
+ [80] "timeOnBench"                                            
+ [81] "penalityMinutes"                                        
+ [82] "penalityMinutesDrawn"                                   
+ [83] "penaltiesDrawn"                                         
+ [84] "shotsBlockedByPlayer"                                   
+ [85] "OnIce_F_xOnGoal"                                        
+ [86] "OnIce_F_xGoals"                                         
+ [87] "OnIce_F_flurryAdjustedxGoals"                           
+ [88] "OnIce_F_scoreVenueAdjustedxGoals"                       
+ [89] "OnIce_F_flurryScoreVenueAdjustedxGoals"                 
+ [90] "OnIce_F_shotsOnGoal"                                    
+ [91] "OnIce_F_missedShots"                                    
+ [92] "OnIce_F_blockedShotAttempts"                            
+ [93] "OnIce_F_shotAttempts"                                   
+ [94] "OnIce_F_goals"                                          
+ [95] "OnIce_F_rebounds"                                       
+ [96] "OnIce_F_reboundGoals"                                   
+ [97] "OnIce_F_lowDangerShots"                                 
+ [98] "OnIce_F_mediumDangerShots"                              
+ [99] "OnIce_F_highDangerShots"                                
+[100] "OnIce_F_lowDangerxGoals"                                
+[101] "OnIce_F_mediumDangerxGoals"                             
+[102] "OnIce_F_highDangerxGoals"                               
+[103] "OnIce_F_lowDangerGoals"                                 
+[104] "OnIce_F_mediumDangerGoals"                              
+[105] "OnIce_F_highDangerGoals"                                
+[106] "OnIce_F_scoreAdjustedShotsAttempts"                     
+[107] "OnIce_F_unblockedShotAttempts"                          
+[108] "OnIce_F_scoreAdjustedUnblockedShotAttempts"             
+[109] "OnIce_F_xGoalsFromxReboundsOfShots"                     
+[110] "OnIce_F_xGoalsFromActualReboundsOfShots"                
+[111] "OnIce_F_reboundxGoals"                                  
+[112] "OnIce_F_xGoals_with_earned_rebounds"                    
+[113] "OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted"      
+[114] "OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted"
+[115] "OnIce_A_xOnGoal"                                        
+[116] "OnIce_A_xGoals"                                         
+[117] "OnIce_A_flurryAdjustedxGoals"                           
+[118] "OnIce_A_scoreVenueAdjustedxGoals"                       
+[119] "OnIce_A_flurryScoreVenueAdjustedxGoals"                 
+[120] "OnIce_A_shotsOnGoal"                                    
+[121] "OnIce_A_missedShots"                                    
+[122] "OnIce_A_blockedShotAttempts"                            
+[123] "OnIce_A_shotAttempts"                                   
+[124] "OnIce_A_goals"                                          
+[125] "OnIce_A_rebounds"                                       
+[126] "OnIce_A_reboundGoals"                                   
+[127] "OnIce_A_lowDangerShots"                                 
+[128] "OnIce_A_mediumDangerShots"                              
+[129] "OnIce_A_highDangerShots"                                
+[130] "OnIce_A_lowDangerxGoals"                                
+[131] "OnIce_A_mediumDangerxGoals"                             
+[132] "OnIce_A_highDangerxGoals"                               
+[133] "OnIce_A_lowDangerGoals"                                 
+[134] "OnIce_A_mediumDangerGoals"                              
+[135] "OnIce_A_highDangerGoals"                                
+[136] "OnIce_A_scoreAdjustedShotsAttempts"                     
+[137] "OnIce_A_unblockedShotAttempts"                          
+[138] "OnIce_A_scoreAdjustedUnblockedShotAttempts"             
+[139] "OnIce_A_xGoalsFromxReboundsOfShots"                     
+[140] "OnIce_A_xGoalsFromActualReboundsOfShots"                
+[141] "OnIce_A_reboundxGoals"                                  
+[142] "OnIce_A_xGoals_with_earned_rebounds"                    
+[143] "OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted"      
+[144] "OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted"
+[145] "OffIce_F_xGoals"                                        
+[146] "OffIce_A_xGoals"                                        
+[147] "OffIce_F_shotAttempts"                                  
+[148] "OffIce_A_shotAttempts"                                  
+[149] "xGoalsForAfterShifts"                                   
+[150] "xGoalsAgainstAfterShifts"                               
+[151] "corsiForAfterShifts"                                    
+[152] "corsiAgainstAfterShifts"                                
+[153] "fenwickForAfterShifts"                                  
+[154] "fenwickAgainstAfterShifts"                              </code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

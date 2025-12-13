@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>About – NHL Skater Performance Analytics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b512256bc363577b27543e003c495f0c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./about.html">About</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">NHL Skater Performance Analytics</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">NHL Skater Performance Analytics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Background</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">preprocessing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">descriptive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">eda</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 1</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ1 — Research Question 1: Shift Efficiency and Player Performance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq1_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">code-fold: true</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 2</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq2_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Predicting Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 3</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 — On-Ice vs Off-Ice Impact Delta</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq3_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 Details: Statistical Validation of Player Impact</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Results &amp; Conclusion</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Results &amp; Discussion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Conclusion &amp; Future Work</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link active" data-scroll-target="#dataset-overview"><span class="header-section-number">1</span> Dataset Overview</a>
+  <ul class="collapse">
+  <li><a href="#key-statistics-included" id="toc-key-statistics-included" class="nav-link" data-scroll-target="#key-statistics-included"><span class="header-section-number">1.1</span> Key Statistics Included</a></li>
+  <li><a href="#why-this-dataset-is-suitable" id="toc-why-this-dataset-is-suitable" class="nav-link" data-scroll-target="#why-this-dataset-is-suitable"><span class="header-section-number">1.2</span> Why This Dataset is Suitable</a></li>
+  <li><a href="#structure-of-data" id="toc-structure-of-data" class="nav-link" data-scroll-target="#structure-of-data"><span class="header-section-number">1.3</span> Structure of Data</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./about.html">About</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">About</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dataset-overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Dataset Overview</h1>
+<p>The dataset contains detailed NHL skater-level performance statistics across shifts, expected goals, Corsi metrics, Fenwick metrics, on-ice/off-ice performance, and special teams performance.</p>
+<p>This dataset enables:</p>
+<ul>
+<li>Micro-shift–level analytics<br>
+</li>
+<li>Expected goals modeling<br>
+</li>
+<li>Special teams evaluation<br>
+</li>
+<li>Advanced on/off impact estimation</li>
+</ul>
+<hr>
+<section id="key-statistics-included" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="key-statistics-included"><span class="header-section-number">1.1</span> Key Statistics Included</h2>
+<ul>
+<li><strong>xGoalsForAfterShifts</strong></li>
+<li><strong>xGoalsAgainstAfterShifts</strong></li>
+<li><strong>Corsi After Shifts</strong></li>
+<li><strong>Fenwick After Shifts</strong></li>
+<li><strong>Power Play metrics</strong></li>
+<li><strong>Penalty Kill metrics</strong></li>
+<li><strong>TOI (Time on Ice)</strong></li>
+<li><strong>Shift counts</strong></li>
+<li><strong>Player roles &amp; positions</strong></li>
+</ul>
+<hr>
+</section>
+<section id="why-this-dataset-is-suitable" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="why-this-dataset-is-suitable"><span class="header-section-number">1.2</span> Why This Dataset is Suitable</h2>
+<p>This dataset supports complex predictive analytics, such as:</p>
+<ul>
+<li>Non-linear decay modeling (RQ1)</li>
+<li>Composite scoring for special teams roles (RQ2)</li>
+<li>Player impact segregation using on/off metrics (RQ3)</li>
+</ul>
+<hr>
+</section>
+<section id="structure-of-data" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="structure-of-data"><span class="header-section-number">1.3</span> Structure of Data</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.6
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.2.0     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'knitr' was built under R version 4.5.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>skaters <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"D:/GMU homeworks/STAT515/final proj/skaters.csv"</span>, <span class="at">guess_max =</span> <span class="dv">20000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4600 Columns: 154
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr   (4): name, team, position, situation
+dbl (150): playerId, season, games_played, icetime, shifts, gameScore, onIce...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(skaters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [4,600 × 154] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ playerId                                               : num [1:4600] 8478047 8478047 8478047 8478047 8478047 ...
+ $ season                                                 : num [1:4600] 2024 2024 2024 2024 2024 ...
+ $ name                                                   : chr [1:4600] "Michael Bunting" "Michael Bunting" "Michael Bunting" "Michael Bunting" ...
+ $ team                                                   : chr [1:4600] "NSH" "NSH" "NSH" "NSH" ...
+ $ position                                               : chr [1:4600] "L" "L" "L" "L" ...
+ $ situation                                              : chr [1:4600] "other" "all" "5on5" "4on5" ...
+ $ games_played                                           : num [1:4600] 76 76 76 76 76 80 80 80 80 80 ...
+ $ icetime                                                : num [1:4600] 2237 70819 59813 6 8763 ...
+ $ shifts                                                 : num [1:4600] 37 1474 1294 2 141 ...
+ $ gameScore                                              : num [1:4600] 26.19 43.7 43.7 2.58 36.88 ...
+ $ onIce_xGoalsPercentage                                 : num [1:4600] 0.37 0.55 0.52 0 0.89 0.44 0.42 0.49 0.13 1 ...
+ $ offIce_xGoalsPercentage                                : num [1:4600] 0.42 0.46 0.48 0.53 0.9 0.57 0.55 0.5 0.13 0.89 ...
+ $ onIce_corsiPercentage                                  : num [1:4600] 0.65 0.58 0.53 0 0.86 0.17 0.41 0.47 0.11 1 ...
+ $ offIce_corsiPercentage                                 : num [1:4600] 0.45 0.48 0.5 0.27 0.85 0.48 0.54 0.51 0.17 0.91 ...
+ $ onIce_fenwickPercentage                                : num [1:4600] 0.64 0.58 0.53 0 0.83 0.18 0.41 0.47 0.14 1 ...
+ $ offIce_fenwickPercentage                               : num [1:4600] 0.47 0.47 0.49 0.4 0.82 0.49 0.52 0.49 0.19 0.88 ...
+ $ iceTimeRank                                            : num [1:4600] 228 442 397 16 319 158 338 367 167 74 ...
+ $ I_F_xOnGoal                                            : num [1:4600] 13.1 177 126.8 0 36.4 ...
+ $ I_F_xGoals                                             : num [1:4600] 3.93 25.19 14.67 0 6.47 ...
+ $ I_F_xRebounds                                          : num [1:4600] 1.21 13.12 8.67 0 3.2 ...
+ $ I_F_xFreeze                                            : num [1:4600] 2.77 39.4 29.83 0 6.7 ...
+ $ I_F_xPlayStopped                                       : num [1:4600] 0.65 6.19 4.42 0 1.1 0.05 2.23 2.09 0.1 0 ...
+ $ I_F_xPlayContinuedInZone                               : num [1:4600] 6.69 91.25 64.91 0 19.37 ...
+ $ I_F_xPlayContinuedOutsideZone                          : num [1:4600] 2.75 61.85 48.5 0 10.15 ...
+ $ I_F_flurryAdjustedxGoals                               : num [1:4600] 2.54 22.85 14.01 0 6.19 ...
+ $ I_F_scoreVenueAdjustedxGoals                           : num [1:4600] 3.93 25.01 14.49 0 6.47 ...
+ $ I_F_flurryScoreVenueAdjustedxGoals                     : num [1:4600] 2.54 22.68 13.84 0 6.19 ...
+ $ I_F_primaryAssists                                     : num [1:4600] 1 12 9 0 2 0 4 4 0 0 ...
+ $ I_F_secondaryAssists                                   : num [1:4600] 1 7 3 0 3 1 9 8 0 0 ...
+ $ I_F_shotsOnGoal                                        : num [1:4600] 9 155 111 0 34 0 51 49 2 0 ...
+ $ I_F_missedShots                                        : num [1:4600] 9 82 60 0 13 2 44 40 2 0 ...
+ $ I_F_blockedShotAttempts                                : num [1:4600] 3 76 59 0 14 0 51 51 0 0 ...
+ $ I_F_shotAttempts                                       : num [1:4600] 21 313 230 0 61 2 146 140 4 0 ...
+ $ I_F_points                                             : num [1:4600] 3 38 19 0 16 1 14 13 0 0 ...
+ $ I_F_goals                                              : num [1:4600] 1 19 7 0 11 0 1 1 0 0 ...
+ $ I_F_rebounds                                           : num [1:4600] 3 24 17 0 4 0 6 6 0 0 ...
+ $ I_F_reboundGoals                                       : num [1:4600] 0 4 1 0 3 0 0 0 0 0 ...
+ $ I_F_freeze                                             : num [1:4600] 2 37 29 0 5 0 13 13 0 0 ...
+ $ I_F_playStopped                                        : num [1:4600] 0 0 0 0 0 0 0 0 0 0 ...
+ $ I_F_playContinuedInZone                                : num [1:4600] 10 69 45 0 14 1 26 24 1 0 ...
+ $ I_F_playContinuedOutsideZone                           : num [1:4600] 2 88 73 0 13 1 49 45 3 0 ...
+ $ I_F_savedShotsOnGoal                                   : num [1:4600] 8 136 104 0 23 0 50 48 2 0 ...
+ $ I_F_savedUnblockedShotAttempts                         : num [1:4600] 17 218 164 0 36 2 94 88 4 0 ...
+ $ penalties                                              : num [1:4600] 0 26 26 0 0 0 16 15 1 0 ...
+ $ I_F_penalityMinutes                                    : num [1:4600] 0 58 58 0 0 0 32 30 2 0 ...
+ $ I_F_faceOffsWon                                        : num [1:4600] 0 5 2 0 3 0 0 0 0 0 ...
+ $ I_F_hits                                               : num [1:4600] 2 70 67 0 1 0 84 76 8 0 ...
+ $ I_F_takeaways                                          : num [1:4600] 0 13 11 0 2 0 20 17 3 0 ...
+ $ I_F_giveaways                                          : num [1:4600] 0 58 51 0 7 1 109 103 5 0 ...
+ $ I_F_lowDangerShots                                     : num [1:4600] 8 137 104 0 25 1 93 88 4 0 ...
+ $ I_F_mediumDangerShots                                  : num [1:4600] 3 69 51 0 14 0 1 1 0 0 ...
+ $ I_F_highDangerShots                                    : num [1:4600] 7 31 16 0 8 1 1 0 0 0 ...
+ $ I_F_lowDangerxGoals                                    : num [1:4600] 0.25 4.1 3.11 0 0.74 0.01 1.82 1.72 0.09 0 ...
+ $ I_F_mediumDangerxGoals                                 : num [1:4600] 0.41 8.95 6.74 0 1.68 0 0.11 0.11 0 0 ...
+ $ I_F_highDangerxGoals                                   : num [1:4600] 3.27 12.13 4.81 0 4.05 ...
+ $ I_F_lowDangerGoals                                     : num [1:4600] 0 3 3 0 0 0 1 1 0 0 ...
+ $ I_F_mediumDangerGoals                                  : num [1:4600] 1 8 3 0 4 0 0 0 0 0 ...
+ $ I_F_highDangerGoals                                    : num [1:4600] 0 8 1 0 7 0 0 0 0 0 ...
+ $ I_F_scoreAdjustedShotsAttempts                         : num [1:4600] 21 311 228 0 61 ...
+ $ I_F_unblockedShotAttempts                              : num [1:4600] 18 237 171 0 47 2 95 89 4 0 ...
+ $ I_F_scoreAdjustedUnblockedShotAttempts                 : num [1:4600] 18 235 169 0 47 ...
+ $ I_F_dZoneGiveaways                                     : num [1:4600] 0 11 11 0 0 1 72 67 4 0 ...
+ $ I_F_xGoalsFromxReboundsOfShots                         : num [1:4600] 0.38 3.04 1.82 0 0.83 0.02 0.68 0.64 0.02 0 ...
+ $ I_F_xGoalsFromActualReboundsOfShots                    : num [1:4600] 1.07 5.09 3.25 0 0.76 0 1.28 1.28 0 0 ...
+ $ I_F_reboundxGoals                                      : num [1:4600] 1.47 8.28 4.47 0 2.34 0 0.03 0.03 0 0 ...
+ $ I_F_xGoals_with_earned_rebounds                        : num [1:4600] 2.84 19.95 12.01 0 4.96 ...
+ $ I_F_xGoals_with_earned_rebounds_scoreAdjusted          : num [1:4600] 2.84 19.85 11.92 0 4.96 ...
+ $ I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted    : num [1:4600] 2.42 19.21 11.8 0 4.86 ...
+ $ I_F_shifts                                             : num [1:4600] 37 1474 1294 2 141 ...
+ $ I_F_oZoneShiftStarts                                   : num [1:4600] 11 231 156 0 64 0 114 108 4 2 ...
+ $ I_F_dZoneShiftStarts                                   : num [1:4600] 0 82 79 0 3 13 361 208 140 0 ...
+ $ I_F_neutralZoneShiftStarts                             : num [1:4600] 0 216 210 0 6 2 305 289 13 1 ...
+ $ I_F_flyShiftStarts                                     : num [1:4600] 26 945 849 2 68 18 983 930 19 16 ...
+ $ I_F_oZoneShiftEnds                                     : num [1:4600] 6 232 201 1 24 0 210 202 8 0 ...
+ $ I_F_dZoneShiftEnds                                     : num [1:4600] 3 204 191 1 9 5 226 193 26 2 ...
+ $ I_F_neutralZoneShiftEnds                               : num [1:4600] 18 215 166 0 31 5 199 168 24 2 ...
+ $ I_F_flyShiftEnds                                       : num [1:4600] 10 823 736 0 77 ...
+ $ faceoffsWon                                            : num [1:4600] 0 5 2 0 3 0 0 0 0 0 ...
+ $ faceoffsLost                                           : num [1:4600] 0 8 6 0 0 0 0 0 0 0 ...
+ $ timeOnBench                                            : num [1:4600] 3275 206470 167868 994 10857 ...
+ $ penalityMinutes                                        : num [1:4600] 0 58 58 0 0 0 32 30 2 0 ...
+ $ penalityMinutesDrawn                                   : num [1:4600] 0 50 50 0 0 0 16 16 0 0 ...
+ $ penaltiesDrawn                                         : num [1:4600] 0 25 25 0 0 0 8 8 0 0 ...
+ $ shotsBlockedByPlayer                                   : num [1:4600] 2 19 17 0 0 2 136 109 0 3 ...
+ $ OnIce_F_xOnGoal                                        : num [1:4600] 39.7 720.8 529 0 151.3 ...
+ $ OnIce_F_xGoals                                         : num [1:4600] 7.99 73.36 45.92 0 19.33 ...
+ $ OnIce_F_flurryAdjustedxGoals                           : num [1:4600] 6.02 68.43 44.29 0 18.01 ...
+ $ OnIce_F_scoreVenueAdjustedxGoals                       : num [1:4600] 7.99 73.39 45.96 0 19.33 ...
+ $ OnIce_F_flurryScoreVenueAdjustedxGoals                 : num [1:4600] 6.02 68.47 44.33 0 18.01 ...
+ $ OnIce_F_shotsOnGoal                                    : num [1:4600] 30 625 458 0 136 4 530 493 32 1 ...
+ $ OnIce_F_missedShots                                    : num [1:4600] 25 358 268 0 65 8 267 254 5 0 ...
+ $ OnIce_F_blockedShotAttempts                            : num [1:4600] 31 408 317 0 60 2 300 295 1 1 ...
+ $ OnIce_F_shotAttempts                                   : num [1:4600] 86 1391 1043 0 261 ...
+ $ OnIce_F_goals                                          : num [1:4600] 5 67 37 0 25 4 53 46 3 0 ...
+ $ OnIce_F_rebounds                                       : num [1:4600] 5 89 61 0 23 0 60 58 2 0 ...
+ $ OnIce_F_reboundGoals                                   : num [1:4600] 0 10 7 0 3 0 3 3 0 0 ...
+ $ OnIce_F_lowDangerShots                                 : num [1:4600] 28 702 542 0 132 2 559 536 20 1 ...
+ $ OnIce_F_mediumDangerShots                              : num [1:4600] 17 199 139 0 42 0 168 155 13 0 ...
+ $ OnIce_F_highDangerShots                                : num [1:4600] 10 82 45 0 27 10 70 56 4 0 ...
+  [list output truncated]
+ - attr(*, "spec")=
+  .. cols(
+  ..   playerId = col_double(),
+  ..   season = col_double(),
+  ..   name = col_character(),
+  ..   team = col_character(),
+  ..   position = col_character(),
+  ..   situation = col_character(),
+  ..   games_played = col_double(),
+  ..   icetime = col_double(),
+  ..   shifts = col_double(),
+  ..   gameScore = col_double(),
+  ..   onIce_xGoalsPercentage = col_double(),
+  ..   offIce_xGoalsPercentage = col_double(),
+  ..   onIce_corsiPercentage = col_double(),
+  ..   offIce_corsiPercentage = col_double(),
+  ..   onIce_fenwickPercentage = col_double(),
+  ..   offIce_fenwickPercentage = col_double(),
+  ..   iceTimeRank = col_double(),
+  ..   I_F_xOnGoal = col_double(),
+  ..   I_F_xGoals = col_double(),
+  ..   I_F_xRebounds = col_double(),
+  ..   I_F_xFreeze = col_double(),
+  ..   I_F_xPlayStopped = col_double(),
+  ..   I_F_xPlayContinuedInZone = col_double(),
+  ..   I_F_xPlayContinuedOutsideZone = col_double(),
+  ..   I_F_flurryAdjustedxGoals = col_double(),
+  ..   I_F_scoreVenueAdjustedxGoals = col_double(),
+  ..   I_F_flurryScoreVenueAdjustedxGoals = col_double(),
+  ..   I_F_primaryAssists = col_double(),
+  ..   I_F_secondaryAssists = col_double(),
+  ..   I_F_shotsOnGoal = col_double(),
+  ..   I_F_missedShots = col_double(),
+  ..   I_F_blockedShotAttempts = col_double(),
+  ..   I_F_shotAttempts = col_double(),
+  ..   I_F_points = col_double(),
+  ..   I_F_goals = col_double(),
+  ..   I_F_rebounds = col_double(),
+  ..   I_F_reboundGoals = col_double(),
+  ..   I_F_freeze = col_double(),
+  ..   I_F_playStopped = col_double(),
+  ..   I_F_playContinuedInZone = col_double(),
+  ..   I_F_playContinuedOutsideZone = col_double(),
+  ..   I_F_savedShotsOnGoal = col_double(),
+  ..   I_F_savedUnblockedShotAttempts = col_double(),
+  ..   penalties = col_double(),
+  ..   I_F_penalityMinutes = col_double(),
+  ..   I_F_faceOffsWon = col_double(),
+  ..   I_F_hits = col_double(),
+  ..   I_F_takeaways = col_double(),
+  ..   I_F_giveaways = col_double(),
+  ..   I_F_lowDangerShots = col_double(),
+  ..   I_F_mediumDangerShots = col_double(),
+  ..   I_F_highDangerShots = col_double(),
+  ..   I_F_lowDangerxGoals = col_double(),
+  ..   I_F_mediumDangerxGoals = col_double(),
+  ..   I_F_highDangerxGoals = col_double(),
+  ..   I_F_lowDangerGoals = col_double(),
+  ..   I_F_mediumDangerGoals = col_double(),
+  ..   I_F_highDangerGoals = col_double(),
+  ..   I_F_scoreAdjustedShotsAttempts = col_double(),
+  ..   I_F_unblockedShotAttempts = col_double(),
+  ..   I_F_scoreAdjustedUnblockedShotAttempts = col_double(),
+  ..   I_F_dZoneGiveaways = col_double(),
+  ..   I_F_xGoalsFromxReboundsOfShots = col_double(),
+  ..   I_F_xGoalsFromActualReboundsOfShots = col_double(),
+  ..   I_F_reboundxGoals = col_double(),
+  ..   I_F_xGoals_with_earned_rebounds = col_double(),
+  ..   I_F_xGoals_with_earned_rebounds_scoreAdjusted = col_double(),
+  ..   I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted = col_double(),
+  ..   I_F_shifts = col_double(),
+  ..   I_F_oZoneShiftStarts = col_double(),
+  ..   I_F_dZoneShiftStarts = col_double(),
+  ..   I_F_neutralZoneShiftStarts = col_double(),
+  ..   I_F_flyShiftStarts = col_double(),
+  ..   I_F_oZoneShiftEnds = col_double(),
+  ..   I_F_dZoneShiftEnds = col_double(),
+  ..   I_F_neutralZoneShiftEnds = col_double(),
+  ..   I_F_flyShiftEnds = col_double(),
+  ..   faceoffsWon = col_double(),
+  ..   faceoffsLost = col_double(),
+  ..   timeOnBench = col_double(),
+  ..   penalityMinutes = col_double(),
+  ..   penalityMinutesDrawn = col_double(),
+  ..   penaltiesDrawn = col_double(),
+  ..   shotsBlockedByPlayer = col_double(),
+  ..   OnIce_F_xOnGoal = col_double(),
+  ..   OnIce_F_xGoals = col_double(),
+  ..   OnIce_F_flurryAdjustedxGoals = col_double(),
+  ..   OnIce_F_scoreVenueAdjustedxGoals = col_double(),
+  ..   OnIce_F_flurryScoreVenueAdjustedxGoals = col_double(),
+  ..   OnIce_F_shotsOnGoal = col_double(),
+  ..   OnIce_F_missedShots = col_double(),
+  ..   OnIce_F_blockedShotAttempts = col_double(),
+  ..   OnIce_F_shotAttempts = col_double(),
+  ..   OnIce_F_goals = col_double(),
+  ..   OnIce_F_rebounds = col_double(),
+  ..   OnIce_F_reboundGoals = col_double(),
+  ..   OnIce_F_lowDangerShots = col_double(),
+  ..   OnIce_F_mediumDangerShots = col_double(),
+  ..   OnIce_F_highDangerShots = col_double(),
+  ..   OnIce_F_lowDangerxGoals = col_double(),
+  ..   OnIce_F_mediumDangerxGoals = col_double(),
+  ..   OnIce_F_highDangerxGoals = col_double(),
+  ..   OnIce_F_lowDangerGoals = col_double(),
+  ..   OnIce_F_mediumDangerGoals = col_double(),
+  ..   OnIce_F_highDangerGoals = col_double(),
+  ..   OnIce_F_scoreAdjustedShotsAttempts = col_double(),
+  ..   OnIce_F_unblockedShotAttempts = col_double(),
+  ..   OnIce_F_scoreAdjustedUnblockedShotAttempts = col_double(),
+  ..   OnIce_F_xGoalsFromxReboundsOfShots = col_double(),
+  ..   OnIce_F_xGoalsFromActualReboundsOfShots = col_double(),
+  ..   OnIce_F_reboundxGoals = col_double(),
+  ..   OnIce_F_xGoals_with_earned_rebounds = col_double(),
+  ..   OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted = col_double(),
+  ..   OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted = col_double(),
+  ..   OnIce_A_xOnGoal = col_double(),
+  ..   OnIce_A_xGoals = col_double(),
+  ..   OnIce_A_flurryAdjustedxGoals = col_double(),
+  ..   OnIce_A_scoreVenueAdjustedxGoals = col_double(),
+  ..   OnIce_A_flurryScoreVenueAdjustedxGoals = col_double(),
+  ..   OnIce_A_shotsOnGoal = col_double(),
+  ..   OnIce_A_missedShots = col_double(),
+  ..   OnIce_A_blockedShotAttempts = col_double(),
+  ..   OnIce_A_shotAttempts = col_double(),
+  ..   OnIce_A_goals = col_double(),
+  ..   OnIce_A_rebounds = col_double(),
+  ..   OnIce_A_reboundGoals = col_double(),
+  ..   OnIce_A_lowDangerShots = col_double(),
+  ..   OnIce_A_mediumDangerShots = col_double(),
+  ..   OnIce_A_highDangerShots = col_double(),
+  ..   OnIce_A_lowDangerxGoals = col_double(),
+  ..   OnIce_A_mediumDangerxGoals = col_double(),
+  ..   OnIce_A_highDangerxGoals = col_double(),
+  ..   OnIce_A_lowDangerGoals = col_double(),
+  ..   OnIce_A_mediumDangerGoals = col_double(),
+  ..   OnIce_A_highDangerGoals = col_double(),
+  ..   OnIce_A_scoreAdjustedShotsAttempts = col_double(),
+  ..   OnIce_A_unblockedShotAttempts = col_double(),
+  ..   OnIce_A_scoreAdjustedUnblockedShotAttempts = col_double(),
+  ..   OnIce_A_xGoalsFromxReboundsOfShots = col_double(),
+  ..   OnIce_A_xGoalsFromActualReboundsOfShots = col_double(),
+  ..   OnIce_A_reboundxGoals = col_double(),
+  ..   OnIce_A_xGoals_with_earned_rebounds = col_double(),
+  ..   OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted = col_double(),
+  ..   OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted = col_double(),
+  ..   OffIce_F_xGoals = col_double(),
+  ..   OffIce_A_xGoals = col_double(),
+  ..   OffIce_F_shotAttempts = col_double(),
+  ..   OffIce_A_shotAttempts = col_double(),
+  ..   xGoalsForAfterShifts = col_double(),
+  ..   xGoalsAgainstAfterShifts = col_double(),
+  ..   corsiForAfterShifts = col_double(),
+  ..   corsiAgainstAfterShifts = col_double(),
+  ..   fenwickForAfterShifts = col_double(),
+  ..   fenwickAgainstAfterShifts = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Rows:"</span>, <span class="fu">nrow</span>(skaters), <span class="st">"</span><span class="sc">\n</span><span class="st">Columns:"</span>, <span class="fu">ncol</span>(skaters))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 4600 
+Columns: 154</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

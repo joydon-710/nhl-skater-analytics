@@ -1,0 +1,3773 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>descriptive – NHL Skater Performance Analytics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b512256bc363577b27543e003c495f0c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./descriptive.html">descriptive</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">NHL Skater Performance Analytics</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">NHL Skater Performance Analytics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Background</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">preprocessing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./descriptive.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">descriptive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">eda</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 1</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ1 — Research Question 1: Shift Efficiency and Player Performance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq1_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">code-fold: true</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 2</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq2_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ2 — Predicting Special Teams Versatility Score (STVS)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Research Question 3</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 — On-Ice vs Off-Ice Impact Delta</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rq3_details.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RQ3 Details: Statistical Validation of Player Impact</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Results &amp; Conclusion</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Results &amp; Discussion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Conclusion &amp; Future Work</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#descriptive-statistics" id="toc-descriptive-statistics" class="nav-link active" data-scroll-target="#descriptive-statistics"><span class="header-section-number">1</span> 3. Descriptive Statistics</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.1</span> 3.1 Overview</a></li>
+  <li><a href="#distribution-of-key-variables" id="toc-distribution-of-key-variables" class="nav-link" data-scroll-target="#distribution-of-key-variables"><span class="header-section-number">1.2</span> 3.2 Distribution of Key Variables</a></li>
+  <li><a href="#detecting-outliers" id="toc-detecting-outliers" class="nav-link" data-scroll-target="#detecting-outliers"><span class="header-section-number">1.3</span> 3.3 Detecting Outliers</a></li>
+  <li><a href="#correlation-analysis" id="toc-correlation-analysis" class="nav-link" data-scroll-target="#correlation-analysis"><span class="header-section-number">1.4</span> 3.4 Correlation Analysis</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.5</span> 3.5 Summary</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Background</a></li><li class="breadcrumb-item"><a href="./descriptive.html">descriptive</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">descriptive</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="descriptive-statistics" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="descriptive-statistics"><span class="header-section-number">1</span> 3. Descriptive Statistics</h2>
+<section id="overview" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.1</span> 3.1 Overview</h3>
+<p>This section summarizes the key descriptive statistics of the NHL skater performance dataset. We compute central tendencies, variability, distribution patterns, and identify any outliers that may influence later modeling steps.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.5.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'knitr' was built under R version 4.5.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>skaters <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"D:/GMU homeworks/STAT515/final proj/skaters.csv"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert numeric-looking character columns</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>skaters_clean <span class="ot">&lt;-</span> skaters <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(.))))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics for numeric variables</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>numeric_summary <span class="ot">&lt;-</span> skaters_clean <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">median =</span> <span class="sc">~</span> <span class="fu">median</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">min =</span> <span class="sc">~</span> <span class="fu">min</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">max =</span> <span class="sc">~</span> <span class="fu">max</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                   ),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}_{.fn}"</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 8 warnings in `summarise()`.
+The first warning was:
+ℹ In argument: `across(...)`.
+Caused by warning in `min()`:
+! no non-missing arguments to min; returning Inf
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 7 remaining warnings.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(numeric_summary, <span class="at">caption =</span> <span class="st">"Descriptive Statistics for Numeric Variables"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Descriptive Statistics for Numeric Variables</caption>
+<colgroup>
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">playerId_mean</th>
+<th style="text-align: right;">playerId_median</th>
+<th style="text-align: right;">playerId_sd</th>
+<th style="text-align: right;">playerId_min</th>
+<th style="text-align: right;">playerId_max</th>
+<th style="text-align: right;">season_mean</th>
+<th style="text-align: right;">season_median</th>
+<th style="text-align: right;">season_sd</th>
+<th style="text-align: right;">season_min</th>
+<th style="text-align: right;">season_max</th>
+<th style="text-align: right;">name_mean</th>
+<th style="text-align: right;">name_median</th>
+<th style="text-align: right;">name_sd</th>
+<th style="text-align: right;">name_min</th>
+<th style="text-align: right;">name_max</th>
+<th style="text-align: right;">team_mean</th>
+<th style="text-align: right;">team_median</th>
+<th style="text-align: right;">team_sd</th>
+<th style="text-align: right;">team_min</th>
+<th style="text-align: right;">team_max</th>
+<th style="text-align: right;">position_mean</th>
+<th style="text-align: right;">position_median</th>
+<th style="text-align: right;">position_sd</th>
+<th style="text-align: right;">position_min</th>
+<th style="text-align: right;">position_max</th>
+<th style="text-align: right;">situation_mean</th>
+<th style="text-align: right;">situation_median</th>
+<th style="text-align: right;">situation_sd</th>
+<th style="text-align: right;">situation_min</th>
+<th style="text-align: right;">situation_max</th>
+<th style="text-align: right;">games_played_mean</th>
+<th style="text-align: right;">games_played_median</th>
+<th style="text-align: right;">games_played_sd</th>
+<th style="text-align: right;">games_played_min</th>
+<th style="text-align: right;">games_played_max</th>
+<th style="text-align: right;">icetime_mean</th>
+<th style="text-align: right;">icetime_median</th>
+<th style="text-align: right;">icetime_sd</th>
+<th style="text-align: right;">icetime_min</th>
+<th style="text-align: right;">icetime_max</th>
+<th style="text-align: right;">shifts_mean</th>
+<th style="text-align: right;">shifts_median</th>
+<th style="text-align: right;">shifts_sd</th>
+<th style="text-align: right;">shifts_min</th>
+<th style="text-align: right;">shifts_max</th>
+<th style="text-align: right;">gameScore_mean</th>
+<th style="text-align: right;">gameScore_median</th>
+<th style="text-align: right;">gameScore_sd</th>
+<th style="text-align: right;">gameScore_min</th>
+<th style="text-align: right;">gameScore_max</th>
+<th style="text-align: right;">onIce_xGoalsPercentage_mean</th>
+<th style="text-align: right;">onIce_xGoalsPercentage_median</th>
+<th style="text-align: right;">onIce_xGoalsPercentage_sd</th>
+<th style="text-align: right;">onIce_xGoalsPercentage_min</th>
+<th style="text-align: right;">onIce_xGoalsPercentage_max</th>
+<th style="text-align: right;">offIce_xGoalsPercentage_mean</th>
+<th style="text-align: right;">offIce_xGoalsPercentage_median</th>
+<th style="text-align: right;">offIce_xGoalsPercentage_sd</th>
+<th style="text-align: right;">offIce_xGoalsPercentage_min</th>
+<th style="text-align: right;">offIce_xGoalsPercentage_max</th>
+<th style="text-align: right;">onIce_corsiPercentage_mean</th>
+<th style="text-align: right;">onIce_corsiPercentage_median</th>
+<th style="text-align: right;">onIce_corsiPercentage_sd</th>
+<th style="text-align: right;">onIce_corsiPercentage_min</th>
+<th style="text-align: right;">onIce_corsiPercentage_max</th>
+<th style="text-align: right;">offIce_corsiPercentage_mean</th>
+<th style="text-align: right;">offIce_corsiPercentage_median</th>
+<th style="text-align: right;">offIce_corsiPercentage_sd</th>
+<th style="text-align: right;">offIce_corsiPercentage_min</th>
+<th style="text-align: right;">offIce_corsiPercentage_max</th>
+<th style="text-align: right;">onIce_fenwickPercentage_mean</th>
+<th style="text-align: right;">onIce_fenwickPercentage_median</th>
+<th style="text-align: right;">onIce_fenwickPercentage_sd</th>
+<th style="text-align: right;">onIce_fenwickPercentage_min</th>
+<th style="text-align: right;">onIce_fenwickPercentage_max</th>
+<th style="text-align: right;">offIce_fenwickPercentage_mean</th>
+<th style="text-align: right;">offIce_fenwickPercentage_median</th>
+<th style="text-align: right;">offIce_fenwickPercentage_sd</th>
+<th style="text-align: right;">offIce_fenwickPercentage_min</th>
+<th style="text-align: right;">offIce_fenwickPercentage_max</th>
+<th style="text-align: right;">iceTimeRank_mean</th>
+<th style="text-align: right;">iceTimeRank_median</th>
+<th style="text-align: right;">iceTimeRank_sd</th>
+<th style="text-align: right;">iceTimeRank_min</th>
+<th style="text-align: right;">iceTimeRank_max</th>
+<th style="text-align: right;">I_F_xOnGoal_mean</th>
+<th style="text-align: right;">I_F_xOnGoal_median</th>
+<th style="text-align: right;">I_F_xOnGoal_sd</th>
+<th style="text-align: right;">I_F_xOnGoal_min</th>
+<th style="text-align: right;">I_F_xOnGoal_max</th>
+<th style="text-align: right;">I_F_xGoals_mean</th>
+<th style="text-align: right;">I_F_xGoals_median</th>
+<th style="text-align: right;">I_F_xGoals_sd</th>
+<th style="text-align: right;">I_F_xGoals_min</th>
+<th style="text-align: right;">I_F_xGoals_max</th>
+<th style="text-align: right;">I_F_xRebounds_mean</th>
+<th style="text-align: right;">I_F_xRebounds_median</th>
+<th style="text-align: right;">I_F_xRebounds_sd</th>
+<th style="text-align: right;">I_F_xRebounds_min</th>
+<th style="text-align: right;">I_F_xRebounds_max</th>
+<th style="text-align: right;">I_F_xFreeze_mean</th>
+<th style="text-align: right;">I_F_xFreeze_median</th>
+<th style="text-align: right;">I_F_xFreeze_sd</th>
+<th style="text-align: right;">I_F_xFreeze_min</th>
+<th style="text-align: right;">I_F_xFreeze_max</th>
+<th style="text-align: right;">I_F_xPlayStopped_mean</th>
+<th style="text-align: right;">I_F_xPlayStopped_median</th>
+<th style="text-align: right;">I_F_xPlayStopped_sd</th>
+<th style="text-align: right;">I_F_xPlayStopped_min</th>
+<th style="text-align: right;">I_F_xPlayStopped_max</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone_mean</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone_median</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone_sd</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone_min</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone_max</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone_mean</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone_median</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone_sd</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone_min</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone_max</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals_mean</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals_median</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals_sd</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals_min</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals_max</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">I_F_primaryAssists_mean</th>
+<th style="text-align: right;">I_F_primaryAssists_median</th>
+<th style="text-align: right;">I_F_primaryAssists_sd</th>
+<th style="text-align: right;">I_F_primaryAssists_min</th>
+<th style="text-align: right;">I_F_primaryAssists_max</th>
+<th style="text-align: right;">I_F_secondaryAssists_mean</th>
+<th style="text-align: right;">I_F_secondaryAssists_median</th>
+<th style="text-align: right;">I_F_secondaryAssists_sd</th>
+<th style="text-align: right;">I_F_secondaryAssists_min</th>
+<th style="text-align: right;">I_F_secondaryAssists_max</th>
+<th style="text-align: right;">I_F_shotsOnGoal_mean</th>
+<th style="text-align: right;">I_F_shotsOnGoal_median</th>
+<th style="text-align: right;">I_F_shotsOnGoal_sd</th>
+<th style="text-align: right;">I_F_shotsOnGoal_min</th>
+<th style="text-align: right;">I_F_shotsOnGoal_max</th>
+<th style="text-align: right;">I_F_missedShots_mean</th>
+<th style="text-align: right;">I_F_missedShots_median</th>
+<th style="text-align: right;">I_F_missedShots_sd</th>
+<th style="text-align: right;">I_F_missedShots_min</th>
+<th style="text-align: right;">I_F_missedShots_max</th>
+<th style="text-align: right;">I_F_blockedShotAttempts_mean</th>
+<th style="text-align: right;">I_F_blockedShotAttempts_median</th>
+<th style="text-align: right;">I_F_blockedShotAttempts_sd</th>
+<th style="text-align: right;">I_F_blockedShotAttempts_min</th>
+<th style="text-align: right;">I_F_blockedShotAttempts_max</th>
+<th style="text-align: right;">I_F_shotAttempts_mean</th>
+<th style="text-align: right;">I_F_shotAttempts_median</th>
+<th style="text-align: right;">I_F_shotAttempts_sd</th>
+<th style="text-align: right;">I_F_shotAttempts_min</th>
+<th style="text-align: right;">I_F_shotAttempts_max</th>
+<th style="text-align: right;">I_F_points_mean</th>
+<th style="text-align: right;">I_F_points_median</th>
+<th style="text-align: right;">I_F_points_sd</th>
+<th style="text-align: right;">I_F_points_min</th>
+<th style="text-align: right;">I_F_points_max</th>
+<th style="text-align: right;">I_F_goals_mean</th>
+<th style="text-align: right;">I_F_goals_median</th>
+<th style="text-align: right;">I_F_goals_sd</th>
+<th style="text-align: right;">I_F_goals_min</th>
+<th style="text-align: right;">I_F_goals_max</th>
+<th style="text-align: right;">I_F_rebounds_mean</th>
+<th style="text-align: right;">I_F_rebounds_median</th>
+<th style="text-align: right;">I_F_rebounds_sd</th>
+<th style="text-align: right;">I_F_rebounds_min</th>
+<th style="text-align: right;">I_F_rebounds_max</th>
+<th style="text-align: right;">I_F_reboundGoals_mean</th>
+<th style="text-align: right;">I_F_reboundGoals_median</th>
+<th style="text-align: right;">I_F_reboundGoals_sd</th>
+<th style="text-align: right;">I_F_reboundGoals_min</th>
+<th style="text-align: right;">I_F_reboundGoals_max</th>
+<th style="text-align: right;">I_F_freeze_mean</th>
+<th style="text-align: right;">I_F_freeze_median</th>
+<th style="text-align: right;">I_F_freeze_sd</th>
+<th style="text-align: right;">I_F_freeze_min</th>
+<th style="text-align: right;">I_F_freeze_max</th>
+<th style="text-align: right;">I_F_playStopped_mean</th>
+<th style="text-align: right;">I_F_playStopped_median</th>
+<th style="text-align: right;">I_F_playStopped_sd</th>
+<th style="text-align: right;">I_F_playStopped_min</th>
+<th style="text-align: right;">I_F_playStopped_max</th>
+<th style="text-align: right;">I_F_playContinuedInZone_mean</th>
+<th style="text-align: right;">I_F_playContinuedInZone_median</th>
+<th style="text-align: right;">I_F_playContinuedInZone_sd</th>
+<th style="text-align: right;">I_F_playContinuedInZone_min</th>
+<th style="text-align: right;">I_F_playContinuedInZone_max</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone_mean</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone_median</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone_sd</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone_min</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone_max</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal_mean</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal_median</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal_sd</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal_min</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal_max</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts_mean</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts_median</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts_sd</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts_min</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts_max</th>
+<th style="text-align: right;">penalties_mean</th>
+<th style="text-align: right;">penalties_median</th>
+<th style="text-align: right;">penalties_sd</th>
+<th style="text-align: right;">penalties_min</th>
+<th style="text-align: right;">penalties_max</th>
+<th style="text-align: right;">I_F_penalityMinutes_mean</th>
+<th style="text-align: right;">I_F_penalityMinutes_median</th>
+<th style="text-align: right;">I_F_penalityMinutes_sd</th>
+<th style="text-align: right;">I_F_penalityMinutes_min</th>
+<th style="text-align: right;">I_F_penalityMinutes_max</th>
+<th style="text-align: right;">I_F_faceOffsWon_mean</th>
+<th style="text-align: right;">I_F_faceOffsWon_median</th>
+<th style="text-align: right;">I_F_faceOffsWon_sd</th>
+<th style="text-align: right;">I_F_faceOffsWon_min</th>
+<th style="text-align: right;">I_F_faceOffsWon_max</th>
+<th style="text-align: right;">I_F_hits_mean</th>
+<th style="text-align: right;">I_F_hits_median</th>
+<th style="text-align: right;">I_F_hits_sd</th>
+<th style="text-align: right;">I_F_hits_min</th>
+<th style="text-align: right;">I_F_hits_max</th>
+<th style="text-align: right;">I_F_takeaways_mean</th>
+<th style="text-align: right;">I_F_takeaways_median</th>
+<th style="text-align: right;">I_F_takeaways_sd</th>
+<th style="text-align: right;">I_F_takeaways_min</th>
+<th style="text-align: right;">I_F_takeaways_max</th>
+<th style="text-align: right;">I_F_giveaways_mean</th>
+<th style="text-align: right;">I_F_giveaways_median</th>
+<th style="text-align: right;">I_F_giveaways_sd</th>
+<th style="text-align: right;">I_F_giveaways_min</th>
+<th style="text-align: right;">I_F_giveaways_max</th>
+<th style="text-align: right;">I_F_lowDangerShots_mean</th>
+<th style="text-align: right;">I_F_lowDangerShots_median</th>
+<th style="text-align: right;">I_F_lowDangerShots_sd</th>
+<th style="text-align: right;">I_F_lowDangerShots_min</th>
+<th style="text-align: right;">I_F_lowDangerShots_max</th>
+<th style="text-align: right;">I_F_mediumDangerShots_mean</th>
+<th style="text-align: right;">I_F_mediumDangerShots_median</th>
+<th style="text-align: right;">I_F_mediumDangerShots_sd</th>
+<th style="text-align: right;">I_F_mediumDangerShots_min</th>
+<th style="text-align: right;">I_F_mediumDangerShots_max</th>
+<th style="text-align: right;">I_F_highDangerShots_mean</th>
+<th style="text-align: right;">I_F_highDangerShots_median</th>
+<th style="text-align: right;">I_F_highDangerShots_sd</th>
+<th style="text-align: right;">I_F_highDangerShots_min</th>
+<th style="text-align: right;">I_F_highDangerShots_max</th>
+<th style="text-align: right;">I_F_lowDangerxGoals_mean</th>
+<th style="text-align: right;">I_F_lowDangerxGoals_median</th>
+<th style="text-align: right;">I_F_lowDangerxGoals_sd</th>
+<th style="text-align: right;">I_F_lowDangerxGoals_min</th>
+<th style="text-align: right;">I_F_lowDangerxGoals_max</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals_mean</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals_median</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals_sd</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals_min</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals_max</th>
+<th style="text-align: right;">I_F_highDangerxGoals_mean</th>
+<th style="text-align: right;">I_F_highDangerxGoals_median</th>
+<th style="text-align: right;">I_F_highDangerxGoals_sd</th>
+<th style="text-align: right;">I_F_highDangerxGoals_min</th>
+<th style="text-align: right;">I_F_highDangerxGoals_max</th>
+<th style="text-align: right;">I_F_lowDangerGoals_mean</th>
+<th style="text-align: right;">I_F_lowDangerGoals_median</th>
+<th style="text-align: right;">I_F_lowDangerGoals_sd</th>
+<th style="text-align: right;">I_F_lowDangerGoals_min</th>
+<th style="text-align: right;">I_F_lowDangerGoals_max</th>
+<th style="text-align: right;">I_F_mediumDangerGoals_mean</th>
+<th style="text-align: right;">I_F_mediumDangerGoals_median</th>
+<th style="text-align: right;">I_F_mediumDangerGoals_sd</th>
+<th style="text-align: right;">I_F_mediumDangerGoals_min</th>
+<th style="text-align: right;">I_F_mediumDangerGoals_max</th>
+<th style="text-align: right;">I_F_highDangerGoals_mean</th>
+<th style="text-align: right;">I_F_highDangerGoals_median</th>
+<th style="text-align: right;">I_F_highDangerGoals_sd</th>
+<th style="text-align: right;">I_F_highDangerGoals_min</th>
+<th style="text-align: right;">I_F_highDangerGoals_max</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts_mean</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts_median</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts_sd</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts_min</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts_max</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts_mean</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts_median</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts_sd</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts_min</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts_max</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts_mean</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts_median</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts_sd</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts_min</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts_max</th>
+<th style="text-align: right;">I_F_dZoneGiveaways_mean</th>
+<th style="text-align: right;">I_F_dZoneGiveaways_median</th>
+<th style="text-align: right;">I_F_dZoneGiveaways_sd</th>
+<th style="text-align: right;">I_F_dZoneGiveaways_min</th>
+<th style="text-align: right;">I_F_dZoneGiveaways_max</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots_mean</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots_median</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots_sd</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots_min</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots_max</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots_mean</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots_median</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots_sd</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots_min</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots_max</th>
+<th style="text-align: right;">I_F_reboundxGoals_mean</th>
+<th style="text-align: right;">I_F_reboundxGoals_median</th>
+<th style="text-align: right;">I_F_reboundxGoals_sd</th>
+<th style="text-align: right;">I_F_reboundxGoals_min</th>
+<th style="text-align: right;">I_F_reboundxGoals_max</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_mean</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_median</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_sd</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_min</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_max</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted_mean</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted_median</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted_sd</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted_min</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted_max</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_mean</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_median</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_sd</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_min</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_max</th>
+<th style="text-align: right;">I_F_shifts_mean</th>
+<th style="text-align: right;">I_F_shifts_median</th>
+<th style="text-align: right;">I_F_shifts_sd</th>
+<th style="text-align: right;">I_F_shifts_min</th>
+<th style="text-align: right;">I_F_shifts_max</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts_mean</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts_median</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts_sd</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts_min</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts_max</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts_mean</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts_median</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts_sd</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts_min</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts_max</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts_mean</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts_median</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts_sd</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts_min</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts_max</th>
+<th style="text-align: right;">I_F_flyShiftStarts_mean</th>
+<th style="text-align: right;">I_F_flyShiftStarts_median</th>
+<th style="text-align: right;">I_F_flyShiftStarts_sd</th>
+<th style="text-align: right;">I_F_flyShiftStarts_min</th>
+<th style="text-align: right;">I_F_flyShiftStarts_max</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds_mean</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds_median</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds_sd</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds_min</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds_max</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds_mean</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds_median</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds_sd</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds_min</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds_max</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds_mean</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds_median</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds_sd</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds_min</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds_max</th>
+<th style="text-align: right;">I_F_flyShiftEnds_mean</th>
+<th style="text-align: right;">I_F_flyShiftEnds_median</th>
+<th style="text-align: right;">I_F_flyShiftEnds_sd</th>
+<th style="text-align: right;">I_F_flyShiftEnds_min</th>
+<th style="text-align: right;">I_F_flyShiftEnds_max</th>
+<th style="text-align: right;">faceoffsWon_mean</th>
+<th style="text-align: right;">faceoffsWon_median</th>
+<th style="text-align: right;">faceoffsWon_sd</th>
+<th style="text-align: right;">faceoffsWon_min</th>
+<th style="text-align: right;">faceoffsWon_max</th>
+<th style="text-align: right;">faceoffsLost_mean</th>
+<th style="text-align: right;">faceoffsLost_median</th>
+<th style="text-align: right;">faceoffsLost_sd</th>
+<th style="text-align: right;">faceoffsLost_min</th>
+<th style="text-align: right;">faceoffsLost_max</th>
+<th style="text-align: right;">timeOnBench_mean</th>
+<th style="text-align: right;">timeOnBench_median</th>
+<th style="text-align: right;">timeOnBench_sd</th>
+<th style="text-align: right;">timeOnBench_min</th>
+<th style="text-align: right;">timeOnBench_max</th>
+<th style="text-align: right;">penalityMinutes_mean</th>
+<th style="text-align: right;">penalityMinutes_median</th>
+<th style="text-align: right;">penalityMinutes_sd</th>
+<th style="text-align: right;">penalityMinutes_min</th>
+<th style="text-align: right;">penalityMinutes_max</th>
+<th style="text-align: right;">penalityMinutesDrawn_mean</th>
+<th style="text-align: right;">penalityMinutesDrawn_median</th>
+<th style="text-align: right;">penalityMinutesDrawn_sd</th>
+<th style="text-align: right;">penalityMinutesDrawn_min</th>
+<th style="text-align: right;">penalityMinutesDrawn_max</th>
+<th style="text-align: right;">penaltiesDrawn_mean</th>
+<th style="text-align: right;">penaltiesDrawn_median</th>
+<th style="text-align: right;">penaltiesDrawn_sd</th>
+<th style="text-align: right;">penaltiesDrawn_min</th>
+<th style="text-align: right;">penaltiesDrawn_max</th>
+<th style="text-align: right;">shotsBlockedByPlayer_mean</th>
+<th style="text-align: right;">shotsBlockedByPlayer_median</th>
+<th style="text-align: right;">shotsBlockedByPlayer_sd</th>
+<th style="text-align: right;">shotsBlockedByPlayer_min</th>
+<th style="text-align: right;">shotsBlockedByPlayer_max</th>
+<th style="text-align: right;">OnIce_F_xOnGoal_mean</th>
+<th style="text-align: right;">OnIce_F_xOnGoal_median</th>
+<th style="text-align: right;">OnIce_F_xOnGoal_sd</th>
+<th style="text-align: right;">OnIce_F_xOnGoal_min</th>
+<th style="text-align: right;">OnIce_F_xOnGoal_max</th>
+<th style="text-align: right;">OnIce_F_xGoals_mean</th>
+<th style="text-align: right;">OnIce_F_xGoals_median</th>
+<th style="text-align: right;">OnIce_F_xGoals_sd</th>
+<th style="text-align: right;">OnIce_F_xGoals_min</th>
+<th style="text-align: right;">OnIce_F_xGoals_max</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal_mean</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal_median</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal_sd</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal_min</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal_max</th>
+<th style="text-align: right;">OnIce_F_missedShots_mean</th>
+<th style="text-align: right;">OnIce_F_missedShots_median</th>
+<th style="text-align: right;">OnIce_F_missedShots_sd</th>
+<th style="text-align: right;">OnIce_F_missedShots_min</th>
+<th style="text-align: right;">OnIce_F_missedShots_max</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_F_shotAttempts_mean</th>
+<th style="text-align: right;">OnIce_F_shotAttempts_median</th>
+<th style="text-align: right;">OnIce_F_shotAttempts_sd</th>
+<th style="text-align: right;">OnIce_F_shotAttempts_min</th>
+<th style="text-align: right;">OnIce_F_shotAttempts_max</th>
+<th style="text-align: right;">OnIce_F_goals_mean</th>
+<th style="text-align: right;">OnIce_F_goals_median</th>
+<th style="text-align: right;">OnIce_F_goals_sd</th>
+<th style="text-align: right;">OnIce_F_goals_min</th>
+<th style="text-align: right;">OnIce_F_goals_max</th>
+<th style="text-align: right;">OnIce_F_rebounds_mean</th>
+<th style="text-align: right;">OnIce_F_rebounds_median</th>
+<th style="text-align: right;">OnIce_F_rebounds_sd</th>
+<th style="text-align: right;">OnIce_F_rebounds_min</th>
+<th style="text-align: right;">OnIce_F_rebounds_max</th>
+<th style="text-align: right;">OnIce_F_reboundGoals_mean</th>
+<th style="text-align: right;">OnIce_F_reboundGoals_median</th>
+<th style="text-align: right;">OnIce_F_reboundGoals_sd</th>
+<th style="text-align: right;">OnIce_F_reboundGoals_min</th>
+<th style="text-align: right;">OnIce_F_reboundGoals_max</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots_mean</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots_median</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots_sd</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots_min</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots_max</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots_mean</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots_median</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots_sd</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots_min</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots_max</th>
+<th style="text-align: right;">OnIce_F_highDangerShots_mean</th>
+<th style="text-align: right;">OnIce_F_highDangerShots_median</th>
+<th style="text-align: right;">OnIce_F_highDangerShots_sd</th>
+<th style="text-align: right;">OnIce_F_highDangerShots_min</th>
+<th style="text-align: right;">OnIce_F_highDangerShots_max</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals_median</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals_min</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals_max</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals_median</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals_min</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals_max</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals_median</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals_min</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals_max</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts_mean</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts_median</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts_sd</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts_min</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts_max</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots_mean</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots_median</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots_sd</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots_min</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots_max</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots_mean</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots_median</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots_sd</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots_min</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots_max</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals_mean</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals_median</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals_sd</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals_min</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals_max</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_mean</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_median</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_sd</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_min</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_max</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted_mean</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted_median</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted_sd</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted_min</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted_max</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_mean</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_median</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_sd</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_min</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted_max</th>
+<th style="text-align: right;">OnIce_A_xOnGoal_mean</th>
+<th style="text-align: right;">OnIce_A_xOnGoal_median</th>
+<th style="text-align: right;">OnIce_A_xOnGoal_sd</th>
+<th style="text-align: right;">OnIce_A_xOnGoal_min</th>
+<th style="text-align: right;">OnIce_A_xOnGoal_max</th>
+<th style="text-align: right;">OnIce_A_xGoals_mean</th>
+<th style="text-align: right;">OnIce_A_xGoals_median</th>
+<th style="text-align: right;">OnIce_A_xGoals_sd</th>
+<th style="text-align: right;">OnIce_A_xGoals_min</th>
+<th style="text-align: right;">OnIce_A_xGoals_max</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals_median</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals_min</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals_max</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal_mean</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal_median</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal_sd</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal_min</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal_max</th>
+<th style="text-align: right;">OnIce_A_missedShots_mean</th>
+<th style="text-align: right;">OnIce_A_missedShots_median</th>
+<th style="text-align: right;">OnIce_A_missedShots_sd</th>
+<th style="text-align: right;">OnIce_A_missedShots_min</th>
+<th style="text-align: right;">OnIce_A_missedShots_max</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_A_shotAttempts_mean</th>
+<th style="text-align: right;">OnIce_A_shotAttempts_median</th>
+<th style="text-align: right;">OnIce_A_shotAttempts_sd</th>
+<th style="text-align: right;">OnIce_A_shotAttempts_min</th>
+<th style="text-align: right;">OnIce_A_shotAttempts_max</th>
+<th style="text-align: right;">OnIce_A_goals_mean</th>
+<th style="text-align: right;">OnIce_A_goals_median</th>
+<th style="text-align: right;">OnIce_A_goals_sd</th>
+<th style="text-align: right;">OnIce_A_goals_min</th>
+<th style="text-align: right;">OnIce_A_goals_max</th>
+<th style="text-align: right;">OnIce_A_rebounds_mean</th>
+<th style="text-align: right;">OnIce_A_rebounds_median</th>
+<th style="text-align: right;">OnIce_A_rebounds_sd</th>
+<th style="text-align: right;">OnIce_A_rebounds_min</th>
+<th style="text-align: right;">OnIce_A_rebounds_max</th>
+<th style="text-align: right;">OnIce_A_reboundGoals_mean</th>
+<th style="text-align: right;">OnIce_A_reboundGoals_median</th>
+<th style="text-align: right;">OnIce_A_reboundGoals_sd</th>
+<th style="text-align: right;">OnIce_A_reboundGoals_min</th>
+<th style="text-align: right;">OnIce_A_reboundGoals_max</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots_mean</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots_median</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots_sd</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots_min</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots_max</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots_mean</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots_median</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots_sd</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots_min</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots_max</th>
+<th style="text-align: right;">OnIce_A_highDangerShots_mean</th>
+<th style="text-align: right;">OnIce_A_highDangerShots_median</th>
+<th style="text-align: right;">OnIce_A_highDangerShots_sd</th>
+<th style="text-align: right;">OnIce_A_highDangerShots_min</th>
+<th style="text-align: right;">OnIce_A_highDangerShots_max</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals_median</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals_min</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals_max</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals_median</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals_min</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals_max</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals_median</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals_min</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals_max</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals_mean</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals_median</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals_sd</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals_min</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals_max</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts_mean</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts_median</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts_sd</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts_min</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts_max</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts_mean</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts_median</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts_sd</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts_min</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts_max</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots_mean</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots_median</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots_sd</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots_min</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots_max</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots_mean</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots_median</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots_sd</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots_min</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots_max</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals_mean</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals_median</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals_sd</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals_min</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals_max</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_mean</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_median</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_sd</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_min</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_max</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted_mean</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted_median</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted_sd</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted_min</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted_max</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted_mean</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted_median</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted_sd</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted_min</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted_max</th>
+<th style="text-align: right;">OffIce_F_xGoals_mean</th>
+<th style="text-align: right;">OffIce_F_xGoals_median</th>
+<th style="text-align: right;">OffIce_F_xGoals_sd</th>
+<th style="text-align: right;">OffIce_F_xGoals_min</th>
+<th style="text-align: right;">OffIce_F_xGoals_max</th>
+<th style="text-align: right;">OffIce_A_xGoals_mean</th>
+<th style="text-align: right;">OffIce_A_xGoals_median</th>
+<th style="text-align: right;">OffIce_A_xGoals_sd</th>
+<th style="text-align: right;">OffIce_A_xGoals_min</th>
+<th style="text-align: right;">OffIce_A_xGoals_max</th>
+<th style="text-align: right;">OffIce_F_shotAttempts_mean</th>
+<th style="text-align: right;">OffIce_F_shotAttempts_median</th>
+<th style="text-align: right;">OffIce_F_shotAttempts_sd</th>
+<th style="text-align: right;">OffIce_F_shotAttempts_min</th>
+<th style="text-align: right;">OffIce_F_shotAttempts_max</th>
+<th style="text-align: right;">OffIce_A_shotAttempts_mean</th>
+<th style="text-align: right;">OffIce_A_shotAttempts_median</th>
+<th style="text-align: right;">OffIce_A_shotAttempts_sd</th>
+<th style="text-align: right;">OffIce_A_shotAttempts_min</th>
+<th style="text-align: right;">OffIce_A_shotAttempts_max</th>
+<th style="text-align: right;">xGoalsForAfterShifts_mean</th>
+<th style="text-align: right;">xGoalsForAfterShifts_median</th>
+<th style="text-align: right;">xGoalsForAfterShifts_sd</th>
+<th style="text-align: right;">xGoalsForAfterShifts_min</th>
+<th style="text-align: right;">xGoalsForAfterShifts_max</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts_mean</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts_median</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts_sd</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts_min</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts_max</th>
+<th style="text-align: right;">corsiForAfterShifts_mean</th>
+<th style="text-align: right;">corsiForAfterShifts_median</th>
+<th style="text-align: right;">corsiForAfterShifts_sd</th>
+<th style="text-align: right;">corsiForAfterShifts_min</th>
+<th style="text-align: right;">corsiForAfterShifts_max</th>
+<th style="text-align: right;">corsiAgainstAfterShifts_mean</th>
+<th style="text-align: right;">corsiAgainstAfterShifts_median</th>
+<th style="text-align: right;">corsiAgainstAfterShifts_sd</th>
+<th style="text-align: right;">corsiAgainstAfterShifts_min</th>
+<th style="text-align: right;">corsiAgainstAfterShifts_max</th>
+<th style="text-align: right;">fenwickForAfterShifts_mean</th>
+<th style="text-align: right;">fenwickForAfterShifts_median</th>
+<th style="text-align: right;">fenwickForAfterShifts_sd</th>
+<th style="text-align: right;">fenwickForAfterShifts_min</th>
+<th style="text-align: right;">fenwickForAfterShifts_max</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts_mean</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts_median</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts_sd</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts_min</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts_max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8479531</td>
+<td style="text-align: right;">8479593</td>
+<td style="text-align: right;">2907.388</td>
+<td style="text-align: right;">8470600</td>
+<td style="text-align: right;">8485512</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">-Inf</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">-Inf</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">-Inf</td>
+<td style="text-align: right;">NaN</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">-Inf</td>
+<td style="text-align: right;">51.33043</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">29.58758</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">20354.04</td>
+<td style="text-align: right;">4226</td>
+<td style="text-align: right;">29516.34</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">129982</td>
+<td style="text-align: right;">425.3409</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">611.9152</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2658</td>
+<td style="text-align: right;">19.26137</td>
+<td style="text-align: right;">9.54</td>
+<td style="text-align: right;">23.12269</td>
+<td style="text-align: right;">-6.5</td>
+<td style="text-align: right;">134.88</td>
+<td style="text-align: right;">0.4320978</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">0.2975902</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.4690543</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.2718158</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.4391891</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.2838598</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.4651609</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.2578452</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.4333478</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.2794921</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.4654826</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.249301</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">181.482</td>
+<td style="text-align: right;">148</td>
+<td style="text-align: right;">168.2931</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">894</td>
+<td style="text-align: right;">35.41603</td>
+<td style="text-align: right;">5.955</td>
+<td style="text-align: right;">55.24779</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">323.89</td>
+<td style="text-align: right;">3.522013</td>
+<td style="text-align: right;">0.73</td>
+<td style="text-align: right;">5.917589</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">41.05</td>
+<td style="text-align: right;">2.366578</td>
+<td style="text-align: right;">0.375</td>
+<td style="text-align: right;">3.750802</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">23.19</td>
+<td style="text-align: right;">8.589033</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">13.46209</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">85.68</td>
+<td style="text-align: right;">1.195307</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.860557</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10.97</td>
+<td style="text-align: right;">19.14562</td>
+<td style="text-align: right;">2.72</td>
+<td style="text-align: right;">29.92933</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">181.42</td>
+<td style="text-align: right;">13.85349</td>
+<td style="text-align: right;">2.61</td>
+<td style="text-align: right;">21.5866</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">124.49</td>
+<td style="text-align: right;">3.34278</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">5.609077</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">3.532793</td>
+<td style="text-align: right;">0.725</td>
+<td style="text-align: right;">5.942636</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">41.14</td>
+<td style="text-align: right;">3.352987</td>
+<td style="text-align: right;">0.675</td>
+<td style="text-align: right;">5.632901</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">38.08</td>
+<td style="text-align: right;">3.192609</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.599276</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">2.55913</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.425359</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">32.17261</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">50.45366</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">320</td>
+<td style="text-align: right;">16.5013</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">25.80084</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">19.04891</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31.44907</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">231</td>
+<td style="text-align: right;">67.72283</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">104.938</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">638</td>
+<td style="text-align: right;">9.168696</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">15.15705</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">3.416956</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.250136</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">3.63413</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.03835</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">0.4258696</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.027426</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">6.72413</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10.94556</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">0.1032609</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.3635822</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">15.47174</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">24.64459</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">168</td>
+<td style="text-align: right;">19.3237</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">29.92792</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: right;">28.75565</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">44.98775</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">288</td>
+<td style="text-align: right;">45.25696</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">70.26852</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">411</td>
+<td style="text-align: right;">3.702609</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.427463</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8.312174</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">15.00127</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">32.24022</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">105.0731</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1016</td>
+<td style="text-align: right;">24.46391</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">46.20058</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">462</td>
+<td style="text-align: right;">5.481956</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.076042</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">16.75435</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26.69136</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">159</td>
+<td style="text-align: right;">35.74652</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">56.83451</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">383</td>
+<td style="text-align: right;">8.941087</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">16.6932</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">3.986304</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.343558</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">1.020957</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">1.65687</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11.6</td>
+<td style="text-align: right;">1.112748</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">2.086404</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13.96</td>
+<td style="text-align: right;">1.388433</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.584106</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20.95</td>
+<td style="text-align: right;">1.24913</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.47134</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">1.144783</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.493199</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">1.023043</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.178068</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">67.85481</td>
+<td style="text-align: right;">10.015</td>
+<td style="text-align: right;">105.2084</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">638.41</td>
+<td style="text-align: right;">48.67391</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">75.70819</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">444</td>
+<td style="text-align: right;">48.79689</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">75.97487</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">443.1</td>
+<td style="text-align: right;">7.603913</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14.28639</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">0.5251239</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.8318621</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5.53</td>
+<td style="text-align: right;">0.7726043</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.325933</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10.24</td>
+<td style="text-align: right;">0.7737283</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.484956</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11.62</td>
+<td style="text-align: right;">3.273202</td>
+<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">5.385036</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">36.78</td>
+<td style="text-align: right;">3.28197</td>
+<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">5.405069</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">36.85</td>
+<td style="text-align: right;">3.187789</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">5.251173</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">34.76</td>
+<td style="text-align: right;">425.3409</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">611.9152</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2658</td>
+<td style="text-align: right;">55.00652</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">85.41487</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">469</td>
+<td style="text-align: right;">53.56174</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">82.14414</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">530</td>
+<td style="text-align: right;">65.73522</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">100.7697</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">456</td>
+<td style="text-align: right;">251.0374</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">365.0292</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1589</td>
+<td style="text-align: right;">55.27522</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">81.4696</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">358</td>
+<td style="text-align: right;">56.60826</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">81.90984</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">363</td>
+<td style="text-align: right;">60.43261</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">88.06667</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">403</td>
+<td style="text-align: right;">253.0248</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">367.4521</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1818</td>
+<td style="text-align: right;">32.24022</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">105.0731</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1016</td>
+<td style="text-align: right;">31.25022</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">99.13321</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">790</td>
+<td style="text-align: right;">52135.54</td>
+<td style="text-align: right;">7849</td>
+<td style="text-align: right;">73753.57</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">251375</td>
+<td style="text-align: right;">8.312174</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">15.00127</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">7.536739</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13.61664</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">3.350652</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5.970381</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">16.90087</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">30.15165</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">211</td>
+<td style="text-align: right;">176.0856</td>
+<td style="text-align: right;">28.595</td>
+<td style="text-align: right;">261.2743</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1331.88</td>
+<td style="text-align: right;">17.53844</td>
+<td style="text-align: right;">4.115</td>
+<td style="text-align: right;">25.40163</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">144.55</td>
+<td style="text-align: right;">16.63093</td>
+<td style="text-align: right;">3.885</td>
+<td style="text-align: right;">24.07391</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">134.74</td>
+<td style="text-align: right;">17.59208</td>
+<td style="text-align: right;">4.085</td>
+<td style="text-align: right;">25.49133</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">145</td>
+<td style="text-align: right;">16.68224</td>
+<td style="text-align: right;">3.89</td>
+<td style="text-align: right;">24.16029</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">135.15</td>
+<td style="text-align: right;">159.7907</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">237.0149</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1258</td>
+<td style="text-align: right;">82.30304</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">122.8547</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">585</td>
+<td style="text-align: right;">95.37696</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">142.1212</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">712</td>
+<td style="text-align: right;">337.4707</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">500.715</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2507</td>
+<td style="text-align: right;">16.90978</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25.47999</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">153</td>
+<td style="text-align: right;">18.17457</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">27.31587</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">153</td>
+<td style="text-align: right;">2.121739</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.428829</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">177.7878</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">266.3682</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1338</td>
+<td style="text-align: right;">44.40348</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">66.73538</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">348</td>
+<td style="text-align: right;">19.90239</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">28.85736</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: right;">5.073763</td>
+<td style="text-align: right;">0.78</td>
+<td style="text-align: right;">7.653112</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">40.54</td>
+<td style="text-align: right;">5.525739</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">8.30728</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">43.02</td>
+<td style="text-align: right;">6.938989</td>
+<td style="text-align: right;">1.875</td>
+<td style="text-align: right;">10.22949</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">66.29</td>
+<td style="text-align: right;">6.172609</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10.00794</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">5.645652</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.0159</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">5.091522</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.152659</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">338.1296</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">501.9913</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2505.66</td>
+<td style="text-align: right;">242.0937</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">359.2183</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1807</td>
+<td style="text-align: right;">242.7144</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">360.3618</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1812</td>
+<td style="text-align: right;">2.622524</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">3.855931</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">21.15</td>
+<td style="text-align: right;">3.871311</td>
+<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">5.809096</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">35.77</td>
+<td style="text-align: right;">3.877585</td>
+<td style="text-align: right;">0.675</td>
+<td style="text-align: right;">5.823573</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">35.77</td>
+<td style="text-align: right;">16.28278</td>
+<td style="text-align: right;">3.85</td>
+<td style="text-align: right;">23.56748</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">132.4</td>
+<td style="text-align: right;">16.32658</td>
+<td style="text-align: right;">3.85</td>
+<td style="text-align: right;">23.64058</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">132.61</td>
+<td style="text-align: right;">15.84811</td>
+<td style="text-align: right;">3.755</td>
+<td style="text-align: right;">22.93846</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">127.47</td>
+<td style="text-align: right;">171.3042</td>
+<td style="text-align: right;">34.155</td>
+<td style="text-align: right;">249.1548</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1212.6</td>
+<td style="text-align: right;">17.01632</td>
+<td style="text-align: right;">4.645</td>
+<td style="text-align: right;">23.65961</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">138.47</td>
+<td style="text-align: right;">16.18107</td>
+<td style="text-align: right;">4.35</td>
+<td style="text-align: right;">22.52474</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">126.68</td>
+<td style="text-align: right;">17.07003</td>
+<td style="text-align: right;">4.67</td>
+<td style="text-align: right;">23.74733</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">139.18</td>
+<td style="text-align: right;">16.23246</td>
+<td style="text-align: right;">4.34</td>
+<td style="text-align: right;">22.60892</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">127.36</td>
+<td style="text-align: right;">155.5457</td>
+<td style="text-align: right;">32.5</td>
+<td style="text-align: right;">225.7238</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1121</td>
+<td style="text-align: right;">80.11609</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">117.6899</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">558</td>
+<td style="text-align: right;">92.77239</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">137.1242</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">668</td>
+<td style="text-align: right;">328.4341</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">479.0911</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2300</td>
+<td style="text-align: right;">16.42783</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">23.03822</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">17.48717</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">25.79895</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.248157</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">173.5167</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">256.283</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1220</td>
+<td style="text-align: right;">42.90804</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">62.21778</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">342</td>
+<td style="text-align: right;">19.23696</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">26.69002</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">4.947487</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">7.301959</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">36.79</td>
+<td style="text-align: right;">5.344952</td>
+<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">7.760483</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">43.1</td>
+<td style="text-align: right;">6.724115</td>
+<td style="text-align: right;">2.08</td>
+<td style="text-align: right;">9.431541</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">60.83</td>
+<td style="text-align: right;">6.074348</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.311976</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">5.449565</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.169975</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">4.903913</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.301948</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">329.0928</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">480.192</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2309.26</td>
+<td style="text-align: right;">235.6617</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">342.8285</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1666</td>
+<td style="text-align: right;">236.2823</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">343.8599</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1673.69</td>
+<td style="text-align: right;">2.492559</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">3.543351</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">19.68</td>
+<td style="text-align: right;">3.699826</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">5.408223</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">32.35</td>
+<td style="text-align: right;">3.706844</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">5.422953</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">32.35</td>
+<td style="text-align: right;">15.80153</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">21.88869</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">126.4</td>
+<td style="text-align: right;">15.84521</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">21.95839</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">126.98</td>
+<td style="text-align: right;">15.41254</td>
+<td style="text-align: right;">4.12</td>
+<td style="text-align: right;">21.38195</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">121.45</td>
+<td style="text-align: right;">42.30191</td>
+<td style="text-align: right;">11.575</td>
+<td style="text-align: right;">58.06571</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">249.51</td>
+<td style="text-align: right;">42.72084</td>
+<td style="text-align: right;">11.91</td>
+<td style="text-align: right;">58.15001</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">238.13</td>
+<td style="text-align: right;">842.4939</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">1196.583</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4697</td>
+<td style="text-align: right;">850.3948</td>
+<td style="text-align: right;">133</td>
+<td style="text-align: right;">1199.246</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4312</td>
+<td style="text-align: right;">0.4002739</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.163014</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">9.29</td>
+<td style="text-align: right;">0.1632109</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.4351998</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.81</td>
+<td style="text-align: right;">9.086739</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">25.48978</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">223</td>
+<td style="text-align: right;">4.028478</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10.27336</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">6.903478</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">19.42397</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">3.148913</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8.017905</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">62</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="distribution-of-key-variables" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="distribution-of-key-variables"><span class="header-section-number">1.2</span> 3.2 Distribution of Key Variables</h3>
+<p>Below we visualize distributions for important performance variables such as shifts, TOI, xGoalsForAfterShifts, and xGoalsAgainstAfterShifts.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.5.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Desired variables</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>vars_to_plot <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"shifts"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"toi"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xGoalsForAfterShifts"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xGoalsAgainstAfterShifts"</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only columns that exist</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>vars_present <span class="ot">&lt;-</span> <span class="fu">intersect</span>(vars_to_plot, <span class="fu">names</span>(skaters_clean))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(vars_present) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"None of the requested variables exist in skaters_clean."</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> skaters_clean <span class="sc">%&gt;%</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">all_of</span>(vars_present),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"variable"</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long, <span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">40</span>,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.7</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Key Performance Metrics"</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Value"</span>,</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="descriptive_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="detecting-outliers" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="detecting-outliers"><span class="header-section-number">1.3</span> 3.3 Detecting Outliers</h3>
+<p>Outliers can distort averages and influence statistical modeling.<br>
+We detect numeric outliers using the 1.5 × IQR rule.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>outlier_detection <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(x, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(x, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  iqr <span class="ot">&lt;-</span> q3 <span class="sc">-</span> q1</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(x <span class="sc">&lt;</span> (q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr) <span class="sc">|</span> x <span class="sc">&gt;</span> (q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> skaters_clean <span class="sc">%&gt;%</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), outlier_detection))</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(outliers, <span class="at">caption =</span> <span class="st">"Number of Outliers Detected per Variable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Number of Outliers Detected per Variable</caption>
+<colgroup>
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">playerId</th>
+<th style="text-align: right;">season</th>
+<th style="text-align: right;">name</th>
+<th style="text-align: right;">team</th>
+<th style="text-align: right;">position</th>
+<th style="text-align: right;">situation</th>
+<th style="text-align: right;">games_played</th>
+<th style="text-align: right;">icetime</th>
+<th style="text-align: right;">shifts</th>
+<th style="text-align: right;">gameScore</th>
+<th style="text-align: right;">onIce_xGoalsPercentage</th>
+<th style="text-align: right;">offIce_xGoalsPercentage</th>
+<th style="text-align: right;">onIce_corsiPercentage</th>
+<th style="text-align: right;">offIce_corsiPercentage</th>
+<th style="text-align: right;">onIce_fenwickPercentage</th>
+<th style="text-align: right;">offIce_fenwickPercentage</th>
+<th style="text-align: right;">iceTimeRank</th>
+<th style="text-align: right;">I_F_xOnGoal</th>
+<th style="text-align: right;">I_F_xGoals</th>
+<th style="text-align: right;">I_F_xRebounds</th>
+<th style="text-align: right;">I_F_xFreeze</th>
+<th style="text-align: right;">I_F_xPlayStopped</th>
+<th style="text-align: right;">I_F_xPlayContinuedInZone</th>
+<th style="text-align: right;">I_F_xPlayContinuedOutsideZone</th>
+<th style="text-align: right;">I_F_flurryAdjustedxGoals</th>
+<th style="text-align: right;">I_F_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">I_F_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">I_F_primaryAssists</th>
+<th style="text-align: right;">I_F_secondaryAssists</th>
+<th style="text-align: right;">I_F_shotsOnGoal</th>
+<th style="text-align: right;">I_F_missedShots</th>
+<th style="text-align: right;">I_F_blockedShotAttempts</th>
+<th style="text-align: right;">I_F_shotAttempts</th>
+<th style="text-align: right;">I_F_points</th>
+<th style="text-align: right;">I_F_goals</th>
+<th style="text-align: right;">I_F_rebounds</th>
+<th style="text-align: right;">I_F_reboundGoals</th>
+<th style="text-align: right;">I_F_freeze</th>
+<th style="text-align: right;">I_F_playStopped</th>
+<th style="text-align: right;">I_F_playContinuedInZone</th>
+<th style="text-align: right;">I_F_playContinuedOutsideZone</th>
+<th style="text-align: right;">I_F_savedShotsOnGoal</th>
+<th style="text-align: right;">I_F_savedUnblockedShotAttempts</th>
+<th style="text-align: right;">penalties</th>
+<th style="text-align: right;">I_F_penalityMinutes</th>
+<th style="text-align: right;">I_F_faceOffsWon</th>
+<th style="text-align: right;">I_F_hits</th>
+<th style="text-align: right;">I_F_takeaways</th>
+<th style="text-align: right;">I_F_giveaways</th>
+<th style="text-align: right;">I_F_lowDangerShots</th>
+<th style="text-align: right;">I_F_mediumDangerShots</th>
+<th style="text-align: right;">I_F_highDangerShots</th>
+<th style="text-align: right;">I_F_lowDangerxGoals</th>
+<th style="text-align: right;">I_F_mediumDangerxGoals</th>
+<th style="text-align: right;">I_F_highDangerxGoals</th>
+<th style="text-align: right;">I_F_lowDangerGoals</th>
+<th style="text-align: right;">I_F_mediumDangerGoals</th>
+<th style="text-align: right;">I_F_highDangerGoals</th>
+<th style="text-align: right;">I_F_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">I_F_unblockedShotAttempts</th>
+<th style="text-align: right;">I_F_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">I_F_dZoneGiveaways</th>
+<th style="text-align: right;">I_F_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">I_F_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">I_F_reboundxGoals</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">I_F_shifts</th>
+<th style="text-align: right;">I_F_oZoneShiftStarts</th>
+<th style="text-align: right;">I_F_dZoneShiftStarts</th>
+<th style="text-align: right;">I_F_neutralZoneShiftStarts</th>
+<th style="text-align: right;">I_F_flyShiftStarts</th>
+<th style="text-align: right;">I_F_oZoneShiftEnds</th>
+<th style="text-align: right;">I_F_dZoneShiftEnds</th>
+<th style="text-align: right;">I_F_neutralZoneShiftEnds</th>
+<th style="text-align: right;">I_F_flyShiftEnds</th>
+<th style="text-align: right;">faceoffsWon</th>
+<th style="text-align: right;">faceoffsLost</th>
+<th style="text-align: right;">timeOnBench</th>
+<th style="text-align: right;">penalityMinutes</th>
+<th style="text-align: right;">penalityMinutesDrawn</th>
+<th style="text-align: right;">penaltiesDrawn</th>
+<th style="text-align: right;">shotsBlockedByPlayer</th>
+<th style="text-align: right;">OnIce_F_xOnGoal</th>
+<th style="text-align: right;">OnIce_F_xGoals</th>
+<th style="text-align: right;">OnIce_F_flurryAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_F_shotsOnGoal</th>
+<th style="text-align: right;">OnIce_F_missedShots</th>
+<th style="text-align: right;">OnIce_F_blockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_shotAttempts</th>
+<th style="text-align: right;">OnIce_F_goals</th>
+<th style="text-align: right;">OnIce_F_rebounds</th>
+<th style="text-align: right;">OnIce_F_reboundGoals</th>
+<th style="text-align: right;">OnIce_F_lowDangerShots</th>
+<th style="text-align: right;">OnIce_F_mediumDangerShots</th>
+<th style="text-align: right;">OnIce_F_highDangerShots</th>
+<th style="text-align: right;">OnIce_F_lowDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_mediumDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_highDangerxGoals</th>
+<th style="text-align: right;">OnIce_F_lowDangerGoals</th>
+<th style="text-align: right;">OnIce_F_mediumDangerGoals</th>
+<th style="text-align: right;">OnIce_F_highDangerGoals</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">OnIce_F_unblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">OnIce_F_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">OnIce_F_reboundxGoals</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">OnIce_A_xOnGoal</th>
+<th style="text-align: right;">OnIce_A_xGoals</th>
+<th style="text-align: right;">OnIce_A_flurryAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_scoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_flurryScoreVenueAdjustedxGoals</th>
+<th style="text-align: right;">OnIce_A_shotsOnGoal</th>
+<th style="text-align: right;">OnIce_A_missedShots</th>
+<th style="text-align: right;">OnIce_A_blockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_shotAttempts</th>
+<th style="text-align: right;">OnIce_A_goals</th>
+<th style="text-align: right;">OnIce_A_rebounds</th>
+<th style="text-align: right;">OnIce_A_reboundGoals</th>
+<th style="text-align: right;">OnIce_A_lowDangerShots</th>
+<th style="text-align: right;">OnIce_A_mediumDangerShots</th>
+<th style="text-align: right;">OnIce_A_highDangerShots</th>
+<th style="text-align: right;">OnIce_A_lowDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_mediumDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_highDangerxGoals</th>
+<th style="text-align: right;">OnIce_A_lowDangerGoals</th>
+<th style="text-align: right;">OnIce_A_mediumDangerGoals</th>
+<th style="text-align: right;">OnIce_A_highDangerGoals</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedShotsAttempts</th>
+<th style="text-align: right;">OnIce_A_unblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_scoreAdjustedUnblockedShotAttempts</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromxReboundsOfShots</th>
+<th style="text-align: right;">OnIce_A_xGoalsFromActualReboundsOfShots</th>
+<th style="text-align: right;">OnIce_A_reboundxGoals</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted</th>
+<th style="text-align: right;">OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted</th>
+<th style="text-align: right;">OffIce_F_xGoals</th>
+<th style="text-align: right;">OffIce_A_xGoals</th>
+<th style="text-align: right;">OffIce_F_shotAttempts</th>
+<th style="text-align: right;">OffIce_A_shotAttempts</th>
+<th style="text-align: right;">xGoalsForAfterShifts</th>
+<th style="text-align: right;">xGoalsAgainstAfterShifts</th>
+<th style="text-align: right;">corsiForAfterShifts</th>
+<th style="text-align: right;">corsiAgainstAfterShifts</th>
+<th style="text-align: right;">fenwickForAfterShifts</th>
+<th style="text-align: right;">fenwickAgainstAfterShifts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">295</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">654</td>
+<td style="text-align: right;">208</td>
+<td style="text-align: right;">394</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">364</td>
+<td style="text-align: right;">391</td>
+<td style="text-align: right;">383</td>
+<td style="text-align: right;">358</td>
+<td style="text-align: right;">428</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">519</td>
+<td style="text-align: right;">534</td>
+<td style="text-align: right;">447</td>
+<td style="text-align: right;">543</td>
+<td style="text-align: right;">401</td>
+<td style="text-align: right;">386</td>
+<td style="text-align: right;">442</td>
+<td style="text-align: right;">371</td>
+<td style="text-align: right;">375</td>
+<td style="text-align: right;">506</td>
+<td style="text-align: right;">454</td>
+<td style="text-align: right;">991</td>
+<td style="text-align: right;">381</td>
+<td style="text-align: right;">397</td>
+<td style="text-align: right;">395</td>
+<td style="text-align: right;">401</td>
+<td style="text-align: right;">390</td>
+<td style="text-align: right;">386</td>
+<td style="text-align: right;">486</td>
+<td style="text-align: right;">449</td>
+<td style="text-align: right;">836</td>
+<td style="text-align: right;">616</td>
+<td style="text-align: right;">582</td>
+<td style="text-align: right;">370</td>
+<td style="text-align: right;">351</td>
+<td style="text-align: right;">721</td>
+<td style="text-align: right;">629</td>
+<td style="text-align: right;">438</td>
+<td style="text-align: right;">727</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">826</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">653</td>
+<td style="text-align: right;">378</td>
+<td style="text-align: right;">386</td>
+<td style="text-align: right;">385</td>
+<td style="text-align: right;">506</td>
+<td style="text-align: right;">343</td>
+<td style="text-align: right;">435</td>
+<td style="text-align: right;">695</td>
+<td style="text-align: right;">463</td>
+<td style="text-align: right;">462</td>
+<td style="text-align: right;">467</td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">364</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">363</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">836</td>
+<td style="text-align: right;">815</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">449</td>
+<td style="text-align: right;">546</td>
+<td style="text-align: right;">622</td>
+<td style="text-align: right;">455</td>
+<td style="text-align: right;">361</td>
+<td style="text-align: right;">283</td>
+<td style="text-align: right;">289</td>
+<td style="text-align: right;">284</td>
+<td style="text-align: right;">290</td>
+<td style="text-align: right;">343</td>
+<td style="text-align: right;">396</td>
+<td style="text-align: right;">336</td>
+<td style="text-align: right;">375</td>
+<td style="text-align: right;">334</td>
+<td style="text-align: right;">329</td>
+<td style="text-align: right;">430</td>
+<td style="text-align: right;">351</td>
+<td style="text-align: right;">374</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">391</td>
+<td style="text-align: right;">399</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">582</td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">357</td>
+<td style="text-align: right;">380</td>
+<td style="text-align: right;">371</td>
+<td style="text-align: right;">375</td>
+<td style="text-align: right;">233</td>
+<td style="text-align: right;">269</td>
+<td style="text-align: right;">270</td>
+<td style="text-align: right;">276</td>
+<td style="text-align: right;">277</td>
+<td style="text-align: right;">275</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">291</td>
+<td style="text-align: right;">290</td>
+<td style="text-align: right;">287</td>
+<td style="text-align: right;">296</td>
+<td style="text-align: right;">245</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">262</td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">222</td>
+<td style="text-align: right;">253</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">239</td>
+<td style="text-align: right;">270</td>
+<td style="text-align: right;">360</td>
+<td style="text-align: right;">333</td>
+<td style="text-align: right;">217</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">209</td>
+<td style="text-align: right;">265</td>
+<td style="text-align: right;">273</td>
+<td style="text-align: right;">277</td>
+<td style="text-align: right;">284</td>
+<td style="text-align: right;">287</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">903</td>
+<td style="text-align: right;">955</td>
+<td style="text-align: right;">812</td>
+<td style="text-align: right;">845</td>
+<td style="text-align: right;">760</td>
+<td style="text-align: right;">799</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="correlation-analysis" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="correlation-analysis"><span class="header-section-number">1.4</span> 3.4 Correlation Analysis</h3>
+<p>We examine relationships between selected numeric variables to identify potential multicollinearity and performance-related patterns.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'corrplot' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.95 loaded</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>corr_data <span class="ot">&lt;-</span> skaters_clean <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor(., use = "pairwise.complete.obs"): the standard deviation is
+zero</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show / Hide Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(corr_data, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">type =</span> <span class="st">"upper"</span>, <span class="at">tl.col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in corrplot(corr_data, method = "color", type = "upper", tl.col =
+"red"): Not been able to calculate text margin, please try again with a clean
+new empty window using {plot.new(); dev.off()} or reduce tl.cex</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="descriptive_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="summary" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.5</span> 3.5 Summary</h3>
+<ul>
+<li>The dataset contains a wide range of performance metrics with varying spreads.</li>
+<li>Some variables show skewness, requiring possible transformation.</li>
+<li>Several variables contain notable outliers.</li>
+<li>Correlation analysis suggests meaningful relationships that will guide predictive modeling.</li>
+</ul>
+<p>This descriptive statistics section provides a foundation for deeper inferential analysis and aligns with the quantitative structure of academic data analytics research.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
