@@ -33,9 +33,9 @@ This website contains:
 1. Understand and preprocess the NHL skater dataset.  
 2. Conduct exploratory and statistical analysis.  
 3. Address three predictive analytics research questions:  
-   - **RQ1:** Shift Efficiency (xGF − xGA per shift)  
-   - **RQ2:** Special Teams Versatility  
-   - **RQ3:** On-Ice vs Off-Ice Impact Delta  
+   - **RQ1:** How does on-ice performance vary across NHL skaters when measured using advanced performance metrics? 
+   - **RQ2:** What is the relationship between workload (time on ice and shifts) and offensive productivity among NHL skaters?  
+   - **RQ3:** Can NHL skaters be meaningfully classified into impact groups using multi-dimensional performance metrics? 
 4. Build predictive models.  
 5. Interpret results and derive insights.  
 
