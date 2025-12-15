@@ -34,8 +34,8 @@ This website contains:
 2. Conduct exploratory and statistical analysis.  
 3. Address three predictive analytics research questions:  
    - **RQ1:** How does on-ice performance vary across NHL skaters when measured using advanced performance metrics? 
-   - **RQ2:** What is the relationship between workload (time on ice and shifts) and offensive productivity among NHL skaters?  
-   - **RQ3:** Can NHL skaters be meaningfully classified into impact groups using multi-dimensional performance metrics? 
+   - **RQ2:** Which players are likely to demonstrate higher versatility on special teams, as measured by combined Power Play and Penalty Kill performance metrics?  
+   - **RQ3:** Which performance metrics most effectively distinguish high-impact skaters from low-impact skaters?” 
 4. Build predictive models.  
 5. Interpret results and derive insights.  
 
