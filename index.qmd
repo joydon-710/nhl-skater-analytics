@@ -33,7 +33,7 @@ This website contains:
 1. Understand and preprocess the NHL skater dataset.  
 2. Conduct exploratory and statistical analysis.  
 3. Address three predictive analytics research questions:  
-   - **RQ1:** How does on-ice performance vary across NHL skaters when measured using advanced performance metrics? 
+   - **RQ1:** How does a player’s shift-based expected goal efficiency relate to overall on-ice performance in the 2023–2024 NHL season?
    - **RQ2:** Which players are likely to demonstrate higher versatility on special teams, as measured by combined Power Play and Penalty Kill performance metrics?  
    - **RQ3:** Which performance metrics most effectively distinguish high-impact skaters from low-impact skaters?” 
 4. Build predictive models.  
